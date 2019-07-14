@@ -7,7 +7,7 @@
 
 
 
-<title>第一篇博客 | glong</title>
+<title>hexo使用说明 | glong</title>
 
 
 
@@ -103,11 +103,74 @@
             <div class="container">
     
     
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">返回顶部</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+
+    
 
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">第一篇博客</h1>
+            <h1 class="post-title">hexo使用说明</h1>
             
                 <div class="post-meta">
                     
@@ -116,14 +179,14 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">July 14, 2019&nbsp;&nbsp;17:03:35</a>
+                        Date: <a href="#">July 14, 2019&nbsp;&nbsp;17:58:37</a>
                         </span>
                     
                     
                         <span class="post-category">
                     Category:
                             
-                                <a href="/categories/生活/">生活</a>
+                                <a href="/categories/hexo/">hexo</a>
                             
                         </span>
                     
@@ -132,7 +195,31 @@
         </header>
 
         <div class="post-content">
-            <p>这是第一篇博客，开启人生日志，记录精彩。</p>
+            <h2 id="hexo使用日记"><a href="#hexo使用日记" class="headerlink" title="hexo使用日记"></a>hexo使用日记</h2><h4 id="hexo介绍"><a href="#hexo介绍" class="headerlink" title="hexo介绍"></a>hexo介绍</h4><p>hexo是以node.js实现的开源博客网站，无需后台系统，主要借助github实现部署。</p>
+<h4 id="详细配置"><a href="#详细配置" class="headerlink" title="详细配置"></a>详细配置</h4><p>主要有两个配置文件：  </p>
+<ul>
+<li>根目录：_config.yml </li>
+<li>主题：_config.yml  </li>
+</ul>
+<p>开启内置服务器：<br>用于本地测试，hexo server,浏览器访问：localhost:4000<br>发布文章流程：<br>1.hexo new [布局] title_name    //生成文件名</p>
+<p>布局有3种：<br>page:source/<br>post:source/_posts<br>draft:source/_drafts  //草稿  </p>
+<ol start="2">
+<li>文本样例<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">title: 第一篇博客</span><br><span class="line">date: 2019-07-14 17:03:35</span><br><span class="line">tag: </span><br><span class="line">- 生活</span><br><span class="line">category:</span><br><span class="line">- 生活</span><br><span class="line">---</span><br><span class="line">这是第一篇博客，开启人生日志，记录精彩。</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<blockquote>
+<p>   注意tag和category的区别，一篇文章只能属于一个分类，可以有多个标签。</p>
+</blockquote>
+<ol start="3">
+<li><p>生成静态文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo generate         //或者 hexo -g</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>部署</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo deploy</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
 
         </div>
 
@@ -161,7 +248,7 @@
                 <span class="tag">
                     
                     
-                        <a href="/tags/生活/"># 生活</a>
+                        <a href="/tags/hexo/"># hexo</a>
                     
                         
                 </span>
@@ -174,10 +261,8 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2019/07/14/hexo部署/">hexo部署</a>
             
-            
-            <a class="next" rel="next" href="/2019/07/14/hello-world/">Hello World</a>
+            <a class="next" rel="next" href="/2019/07/14/hexo部署/">hexo部署</a>
             
         </section>
 
