@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+
+
+<title>mac安装mongodb扩展 | glong</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">glong&#39; blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">文档</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于我</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">glong&#39; blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">文档</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于我</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">返回顶部</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">mac安装mongodb扩展</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">glong</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">July 20, 2019&nbsp;&nbsp;17:40:53</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/mongodb/">mongodb</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h4 id="问题描述？"><a href="#问题描述？" class="headerlink" title="问题描述？"></a>问题描述？</h4><p>项目需要mongodb扩展支持，因而需要安装mongodb扩展</p>
+<h4 id="安装途径"><a href="#安装途径" class="headerlink" title="安装途径"></a>安装途径</h4><ul>
+<li>通过brew ,通过brew search mongodb,可以找到不同php版本的mongodb,此方法经过谷歌发现在php7版本后就不再支持，因而放弃。</li>
+<li>通过pecl,  pecl install mongodb<blockquote>
+<p> PECL 是通过 PEAR 打包系统来的 PHP 扩展库仓库。PEAR是可重用PHP组件的框架和分发系统。</p>
+</blockquote>
+</li>
+</ul>
+<blockquote>
+<p> 前进的道路总是坎坷的，遇到问题，不能退缩，要有誓死解决的心态。</p>
+</blockquote>
+<h4 id="安装流程"><a href="#安装流程" class="headerlink" title="安装流程"></a>安装流程</h4><h5 id="编译安装mongodb"><a href="#编译安装mongodb" class="headerlink" title="编译安装mongodb"></a>编译安装mongodb</h5><ol>
+<li>下载扩展包<blockquote>
+<p> wget <a href="http://pecl.php.net/get/mongodb-1.4.3.tgz" target="_blank" rel="noopener">http://pecl.php.net/get/mongodb-1.4.3.tgz</a></p>
+</blockquote>
+</li>
+<li>解压安装包<blockquote>
+<p> tar -zxvf  mongodb-1.4.3.tgz</p>
+</blockquote>
+</li>
+<li>进入解压目录，运行phpize<blockquote>
+<p> cd mongodb-1.4.3<br> phpize       //也可以加上路径，/etc/local/bin/phpize</p>
+</blockquote>
+</li>
+<li>安装编译mongodb扩展<blockquote>
+<p> ./configure –with-php-config=/usr/localbin/php-config<br>make &amp;&amp; make install</p>
+</blockquote>
+</li>
+<li>编辑php.ini<blockquote>
+<p> extension= mongodb</p>
+</blockquote>
+<h5 id="pecl安装mongodb"><a href="#pecl安装mongodb" class="headerlink" title="pecl安装mongodb"></a>pecl安装mongodb</h5>见证真正的力量吧。<blockquote>
+<p> pecl install mongodb</p>
+</blockquote>
+<h4 id="错误提示"><a href="#错误提示" class="headerlink" title="错误提示"></a>错误提示</h4>pecl安装mongodb失败，显示错误原因为：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ERROR: &apos;make&apos; failed</span><br><span class="line">/private/tmp/pear/install/mongodb/src/libmongoc/src/libmongoc/src/mongoc/mongoc-rand-common-crypto.c:25:10: fatal error: &apos;Security/Security.h&apos; file not found</span><br><span class="line">1 error generated.</span><br><span class="line">make: *** [src/libmongoc/src/libmongoc/src/mongoc/mongoc-rand-common-crypto.lo] Error 1</span><br><span class="line">ERROR: `make&apos; failed</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h4 id="finally"><a href="#finally" class="headerlink" title="finally"></a>finally</h4><blockquote>
+<p> 谷歌还是好东西 </p>
+</blockquote>
+<p>幸好有谷歌翻墙帮助，找到一条解决办法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1.  xcode-select --install</span><br><span class="line">2.  sudo installer -pkg /Library/Developer/CommandLineTools/Packages/macOS_SDK_headers_for_macOS_10.14.pkg -target /</span><br></pre></td></tr></table></figure>
+
+<p>总结：<br>前进的道路总是坎坷的。虽然bug让我们心碎，<br>但是解决一个问题后的喜悦总是幸福的。</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                    <p class="copyright-item">
+                        <span>版权声明:</span>
+                        <span>文章均原创，如有侵权，请联系删除，转载请注明出处。</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>签名:</span>
+                         <span>追求事物的真谛</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>标签:</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/mongodb/"># mongodb</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">返回</a>
+                <span>· </span>
+                <a href="/">首页</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2019/07/15/shell使用一/"></a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© 2019  glong
+        |
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? "https://" : "http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1277816600'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s5.cnzz.com/z_stat.php%3Fid%3D1277816600%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+        </span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>
