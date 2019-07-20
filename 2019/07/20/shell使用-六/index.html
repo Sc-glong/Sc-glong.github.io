@@ -7,7 +7,7 @@
 
 
 
-<title>shell使用(五) | glong</title>
+<title>shell使用(六) | glong</title>
 
 
 
@@ -170,7 +170,7 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">shell使用(五)</h1>
+            <h1 class="post-title">shell使用(六)</h1>
             
                 <div class="post-meta">
                     
@@ -179,7 +179,7 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">July 20, 2019&nbsp;&nbsp;18:01:47</a>
+                        Date: <a href="#">July 20, 2019&nbsp;&nbsp;18:01:58</a>
                         </span>
                     
                     
@@ -195,20 +195,83 @@
         </header>
 
         <div class="post-content">
-            <h4 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">function function_name () &#123;</span><br><span class="line">    list of commands</span><br><span class="line">    [ return value ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+            <h5 id="输入输出重定向"><a href="#输入输出重定向" class="headerlink" title="输入输出重定向"></a>输入输出重定向</h5><p>unix 命令默认从标准输入设备(Stdin)获取输入，将结果输出到标准输出设备(Stdout)显示。一般情况下，标准输入设备就是键盘，标准输出设备就是终端，即显示器。 输出重定向</p>
+<p>命令的输出不仅可以是显示器，还可以很容易的转移向到文件，这被称为输出重定向。<br>语法：<br>覆盖<br><code>command &gt; file</code><br>追加<br><code>line 2 &gt;&gt; users</code>  </p>
+<p>输入重定向  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">command &lt; file</span><br></pre></td></tr></table></figure>
 
-<p>调用函数只需要给出函数名，不需要加括号。</p>
-<p>函数返回值，可以显式增加return语句；如果不加，会将最后一条命令运行结果作为返回值。</p>
-<p>Shell 函数返回值只能是整数，一般用来表示函数执行成功与否，0表示成功，其他值表示失败。如果 return 其他数据，比如一个字符串，往往会得到错误提示：numeric argument required。</p>
-<h4 id="函数的参数"><a href="#函数的参数" class="headerlink" title="函数的参数"></a>函数的参数</h4><p>在Shell中，调用函数时可以向其传递参数。在函数体内部，通过 ‘$n’ 的形式来获取参数的值，例如，’$1’表示第一个参数，’$2’ 表示第二个参数…这就是前面讲的特殊变量。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line"></span><br><span class="line">function sum()&#123;</span><br><span class="line">	case $# in </span><br><span class="line">		0) echo &quot;no param&quot;;;</span><br><span class="line">		1) echo $1;;</span><br><span class="line">		2) echo `expr $1 + $2`;;</span><br><span class="line">		3) echo `expr $1 + $2 + $3`;;</span><br><span class="line">		*) echo &quot;$# params! It&apos;s too much!&quot;;;</span><br><span class="line">	esac</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">sum 1 3 5 6</span><br></pre></td></tr></table></figure>
+<p>这样，本来需要从键盘获取输入的命令会转移到文件读取内容。  </p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>command &gt; file</td>
+<td>将输出重定向到 file。</td>
+</tr>
+<tr>
+<td>command &lt; file</td>
+<td>将输入重定向到 file。</td>
+</tr>
+<tr>
+<td>command &gt;&gt; file</td>
+<td>将输出以追加的方式重定向到 file。</td>
+</tr>
+<tr>
+<td>n &gt; file</td>
+<td>将文件描述符为 n 的文件重定向到 file。</td>
+</tr>
+<tr>
+<td>n &gt;&gt; file</td>
+<td>将文件描述符为 n 的文件以追加的方式重定向到 file。</td>
+</tr>
+<tr>
+<td>n &gt;&amp; m</td>
+<td>将输出文件 m 和 n 合并。</td>
+</tr>
+<tr>
+<td>n &lt;&amp; m</td>
+<td>将输入文件 m 和 n 合并。</td>
+</tr>
+<tr>
+<td>&lt;&lt; tag</td>
+<td>将开始标记 tag 和结束标记 tag 之间的内容作为输入。</td>
+</tr>
+</tbody></table>
+<p>一般情况下，每个 ‘Unix Linux’ 命令运行时都会打开三个文件：</p>
+<ul>
+<li>标准输入文件(Stdin)：stdin的文件描述符为0，Unix程序默认从stdin读取数据。</li>
+<li>标准输出文件(Stdout)：stdout 的文件描述符为1，Unix程序默认向stdout输出数据。</li>
+<li>标准错误文件(Stderr)：stderr的文件描述符为2，Unix程序会向stderr流中写入错误信息。  </li>
+</ul>
+<p><code>默认情况下，&#39;command &gt; file&#39; 将 stdout 重定向到 file，&#39;command &lt; file&#39; 将stdin 重定向到 file。</code></p>
+<p>如果希望 stderr 重定向到 file，可以这样写：<br><code>command 2 &gt; file</code></p>
+<p>如果希望 stderr 追加到 file 文件末尾，可以这样写：<br><code>command 2 &gt;&gt; file</code></p>
+<h4 id="重定向到-dev-Null-文件"><a href="#重定向到-dev-Null-文件" class="headerlink" title="重定向到 /dev/ Null 文件"></a>重定向到 /dev/ Null 文件</h4><p>如果希望执行某个命令，但又不希望在屏幕上显示输出结果，那么可以将输出重定向到 /dev/ Null：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">command &gt; /dev/null</span><br></pre></td></tr></table></figure>
 
-<p>运行结果：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">4 params! It&apos;s too much!</span><br></pre></td></tr></table></figure>
+<p>dev null 是一个特殊的文件，写入到它的内容都会被丢弃；如果尝试从该文件读取内容，那么什么也读不到。但是 /dev /null 文件非常有用，将命令的输出重定向到它，会起到禁止输出的效果。</p>
+<p>如果希望屏蔽 stdout 和 stderr，可以这样写：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">command &gt; /dev/null 2&gt;&amp;1</span><br></pre></td></tr></table></figure>
 
-<h4 id="如何获取函数返回值"><a href="#如何获取函数返回值" class="headerlink" title="如何获取函数返回值"></a>如何获取函数返回值</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line"></span><br><span class="line">function sum()</span><br><span class="line">&#123;</span><br><span class="line">	echo `expr 1+2+3`</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">num=$(sum)</span><br></pre></td></tr></table></figure>
+<p>这样不会在屏幕打印任何信息。</p>
+<h4 id="Shell文件包含"><a href="#Shell文件包含" class="headerlink" title="Shell文件包含"></a>Shell文件包含</h4><p>像其他语言一样，Shell 也可以包含外部脚本，将外部脚本的内容合并到当前脚本。</p>
+<p>Shell 中包含脚本可以使用<br> <code>. filename 或 source filename 。</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">两种方式的效果相同，简单起见，一般使用点号(.)，但是注意点号(.)和文件名中间有一空格。</span><br></pre></td></tr></table></figure>
 
+<p>示例：被包含文件：sub.sh</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">name=&quot;yjc&quot;</span><br><span class="line">主文件：test.sh</span><br><span class="line"></span><br><span class="line">. ./sub.sh</span><br><span class="line">echo $name</span><br><span class="line">运行结果：</span><br><span class="line"></span><br><span class="line">yjc</span><br></pre></td></tr></table></figure>
 
+<h4 id="获取当前正在执行脚本的绝对路径"><a href="#获取当前正在执行脚本的绝对路径" class="headerlink" title="获取当前正在执行脚本的绝对路径"></a>获取当前正在执行脚本的绝对路径</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">basepath=$(cd `dirname $0`; pwd)</span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line">#### 按特定字符串截取字符串</span><br></pre></td></tr></table></figure>
+
+<p>示例：截取/www/html/php/myapp/里的myapp。</p>
+<p>方案：</p>
+<p>str=/www/html/php/myapp/<br>b=($(echo $str|sed ‘s#/# #g’))<br>b_len=<code>expr ${&amp;#35;b[*]} - 1</code><br>app_name=${b[$b_len]}<br>echo $app_name<br>这里利用sed将字符串按指定字符截成数组，然后取最后一个。</p>
+<p>计算数组长度：${&#35;arr[*]}<br>计算则需要使用expr命令</p>
+<pre><code></code></pre>
         </div>
 
         
@@ -249,10 +312,8 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2019/07/20/shell使用-六/">shell使用(六)</a>
             
-            
-            <a class="next" rel="next" href="/2019/07/20/shell使用-四/">shell使用(四)</a>
+            <a class="next" rel="next" href="/2019/07/20/shell使用-五/">shell使用(五)</a>
             
         </section>
 
