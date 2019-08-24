@@ -7,7 +7,7 @@
 
 
 
-<title>开发习惯养成 | glong</title>
+<title>字母易位词不同复杂度实现 | glong</title>
 
 
 
@@ -170,7 +170,7 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">开发习惯养成</h1>
+            <h1 class="post-title">字母易位词不同复杂度实现</h1>
             
                 <div class="post-meta">
                     
@@ -179,14 +179,14 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">August 24, 2019&nbsp;&nbsp;19:13:27</a>
+                        Date: <a href="#">August 24, 2019&nbsp;&nbsp;19:54:59</a>
                         </span>
                     
                     
                         <span class="post-category">
                     Category:
                             
-                                <a href="/categories/生活/">生活</a>
+                                <a href="/categories/算法/">算法</a>
                             
                         </span>
                     
@@ -195,19 +195,14 @@
         </header>
 
         <div class="post-content">
-            <h3 id="开发习惯养成记"><a href="#开发习惯养成记" class="headerlink" title="开发习惯养成记"></a>开发习惯养成记</h3><p>1.严格的按照mvc格式分布自己自己逻辑代码<br>controller: 获取接口参数，校验接口参数，以指定格式返回值。<br>service: 业务逻辑层，注重于业务服务支持<br>repository:数据库操作层。数据库增删改查。<br>model:数据库模型层。  </p>
-<p>2.git使用注意⚠️  </p>
-<ul>
-<li>开发时新建独立的开发分支，以feature_xxx命名。  </li>
-<li>在开发时，无论如何保持自己开发分支的干净，不能让其他分支的代码合进自己的分支，️禁止在开发分支上git merge xxx。  </li>
-<li>在修复bug时，注意新建分支，不要沿用旧的开发分支。</li>
-<li>在合release分支时，出现冲突不能不能将release分支合到开发分支，将release分支拉到本地，切换到release分支，用git merge 开发分支，解决冲突后，再将release分支推到远端分支。  </li>
-</ul>
-<p>3.严格自测,最好是自建前端环境自测。</p>
-<p>4.注意is_null(),empty()的区别。</p>
-<p>5.注意代码的简洁性，对于一个函数实现的功能，将该功能拆分小的模块，即拆分为几个函数。</p>
-<p>6.对于方法中出现的一些数字，尽量不要只用数字来表示，可以封装在一个配置类中或者写在config文件下的配置文件中。  </p>
-<p>7.在写代码的过程中，不能用@符号。<br>8.在写代码的时候尽量保持代码简洁，减少冗余度。</p>
+            <h4 id="什么叫字母易位词？"><a href="#什么叫字母易位词？" class="headerlink" title="什么叫字母易位词？"></a>什么叫字母易位词？</h4><p>两个单词如果包含相同的字母，次序不同，则称为字母易位词(anagram)。</p>
+<h4 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h4><p>给定一个字符串数组，将字母异位词组合在一起。字母异位词指字母相同，但排列不同的字符串。</p>
+<h4 id="示例"><a href="#示例" class="headerlink" title="示例:"></a>示例:</h4><p>[“eat”, “tea”, “tan”, “ate”, “nat”, “bat”]<br>说明：</p>
+<p>所有输入均为小写字母。<br>不考虑答案输出的顺序。</p>
+<h4 id="按计数分类"><a href="#按计数分类" class="headerlink" title="按计数分类"></a>按计数分类</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">class Solution:</span><br><span class="line">    def groupAnagrams(strs):</span><br><span class="line">        ans = collections.defaultdict(list)</span><br><span class="line">        for s in strs:</span><br><span class="line">            count = [0] * 26</span><br><span class="line">            for c in s:</span><br><span class="line">                count[ord(c) - ord(&apos;a&apos;)] += 1</span><br><span class="line">            ans[tuple(count)].append(s)</span><br><span class="line">        return ans.values()</span><br></pre></td></tr></table></figure>
+
+<h5 id="排序数组分类"><a href="#排序数组分类" class="headerlink" title="排序数组分类"></a>排序数组分类</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">class Solution(object):</span><br><span class="line">    def groupAnagrams(self, strs):</span><br><span class="line">        ans = collections.defaultdict(list)</span><br><span class="line">        for s in strs:</span><br><span class="line">            ans[tuple(sorted(s))].append(s)</span><br><span class="line">        return ans.values()</span><br></pre></td></tr></table></figure>
+
 
         </div>
 
@@ -236,7 +231,7 @@
                 <span class="tag">
                     
                     
-                        <a href="/tags/生活/"># 生活</a>
+                        <a href="/tags/算法/"># 算法</a>
                     
                         
                 </span>
@@ -249,10 +244,8 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2019/08/24/字母易位词不同复杂度实现/">字母易位词不同复杂度实现</a>
             
-            
-            <a class="next" rel="next" href="/2019/08/15/2019-08-15日记/">2019-08-15日记</a>
+            <a class="next" rel="next" href="/2019/08/24/开发习惯养成/">开发习惯养成</a>
             
         </section>
 
