@@ -7,7 +7,7 @@
 
 
 
-<title>爬楼梯算法 | glong</title>
+<title>看书是一个好习惯 | glong</title>
 
 
 
@@ -170,7 +170,7 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">爬楼梯算法</h1>
+            <h1 class="post-title">看书是一个好习惯</h1>
             
                 <div class="post-meta">
                     
@@ -179,14 +179,14 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">August 24, 2019&nbsp;&nbsp;20:00:05</a>
+                        Date: <a href="#">September 1, 2019&nbsp;&nbsp;09:24:48</a>
                         </span>
                     
                     
                         <span class="post-category">
                     Category:
                             
-                                <a href="/categories/算法/">算法</a>
+                                <a href="/categories/生活/">生活</a>
                             
                         </span>
                     
@@ -195,13 +195,26 @@
         </header>
 
         <div class="post-content">
-            <h3 id="问题描述："><a href="#问题描述：" class="headerlink" title="问题描述："></a>问题描述：</h3><p>假设你正在爬楼梯。需要 n 阶你才能到达楼顶。<br>每次你可以爬 1 或 2 个台阶。你有多少种不同的方法可以爬到楼顶呢？<br>代码解析</p>
-<h3 id="算法思路："><a href="#算法思路：" class="headerlink" title="算法思路："></a>算法思路：</h3><p>   1.暴力法<br>   2.动态规划  </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">//c实现</span><br><span class="line">int climbStairs(int n)&#123;</span><br><span class="line">    </span><br><span class="line">   if (n == 1) </span><br><span class="line">   &#123;</span><br><span class="line">            return 1;</span><br><span class="line">   &#125;</span><br><span class="line">    </span><br><span class="line">        int first = 1;</span><br><span class="line">        int second = 2;</span><br><span class="line">    </span><br><span class="line">        for (int i = 3; i &lt;= n; i++) </span><br><span class="line">        &#123;</span><br><span class="line">            second = first + second;</span><br><span class="line">            first = second - first;</span><br><span class="line">        &#125;</span><br><span class="line">        return second;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>斐波那契数列<br>      斐波那契数，亦称之为斐波那契数列（意大利语： Successione di Fibonacci)，又称黄金分割数列、费波那西数列、费波拿契数、费氏数列，指的是这样一个数列：1、1、2、3、5、8、13、21、……在数学上，斐波那契数列以如下被以递归的方法定义：F0=0，F1=1，Fn=Fn-1+Fn-2（n&gt;=2，n∈N*），用文字来说，就是斐波那契数列由 0 和 1 开始，之后的斐波那契数列系数就由之前的两数相加。</p>
-</blockquote>
+            <h2 id="2019年阅读清单"><a href="#2019年阅读清单" class="headerlink" title="2019年阅读清单"></a>2019年阅读清单</h2><hr>
+<ul>
+<li><input checked disabled type="checkbox"> redis实现</li>
+<li><input checked disabled type="checkbox"> mysql入门</li>
+<li><input checked disabled type="checkbox"> c 语言基础</li>
+<li><input checked disabled type="checkbox"> mongoDB初级篇</li>
+</ul>
+<hr>
+<ul>
+<li><input disabled type="checkbox"> mongodb权威指南</li>
+<li><input disabled type="checkbox"> 算法4</li>
+<li><input disabled type="checkbox"> java spring架构</li>
+<li><input disabled type="checkbox"> headFisrt设计模式</li>
+<li><input disabled type="checkbox"> python基础</li>
+<li><input disabled type="checkbox"> 计算机操作系统</li>
+<li><input disabled type="checkbox"> 网络原理</li>
+<li><input disabled type="checkbox"> linux</li>
+</ul>
+<hr>
+<p>我感谢自己平凡，敢爱敢恨没负担。<br>我感谢自己不凡，可爱可恨都包揽。</p>
 
         </div>
 
@@ -230,7 +243,7 @@
                 <span class="tag">
                     
                     
-                        <a href="/tags/算法/"># 算法</a>
+                        <a href="/tags/生活/"># 生活</a>
                     
                         
                 </span>
@@ -243,10 +256,8 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2019/09/01/看书是一个好习惯/">看书是一个好习惯</a>
             
-            
-            <a class="next" rel="next" href="/2019/08/24/字母易位词不同复杂度实现/">字母易位词不同复杂度实现</a>
+            <a class="next" rel="next" href="/2019/08/24/爬楼梯算法/">爬楼梯算法</a>
             
         </section>
 
