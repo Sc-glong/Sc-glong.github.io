@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+
+
+<title>redis限流 | glong</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">glong&#39; blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">文档</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于我</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">glong&#39; blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">文档</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于我</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">返回顶部</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">redis限流</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">glong</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">September 1, 2019&nbsp;&nbsp;09:30:12</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/redis/">redis</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h3 id="Redis限流"><a href="#Redis限流" class="headerlink" title="Redis限流"></a>Redis限流</h3><ul>
+<li><p>在高并发场景下有三把利器保护系统：缓存、降级、和限流。</p>
+</li>
+<li><p>限流算法 常见的限流算法有：计数器，漏桶、令牌桶。</p>
+<h4 id="计数器"><a href="#计数器" class="headerlink" title="计数器"></a>计数器</h4><blockquote>
+<p>顾名思义就是来一个记一个，然后判断在有限时间窗口内的数量是否超过限制即可</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">function isActionAllowed($userId, $action, $period, $maxCount)</span><br><span class="line">&#123;</span><br><span class="line">    $redis = new Redis();</span><br><span class="line">    $redis-&gt;connect(&apos;127.0.0.1&apos;, 6379);</span><br><span class="line">    $key = sprintf(&apos;hist:%s:%s&apos;, $userId, $action);</span><br><span class="line">    $now = msectime();   # 毫秒时间戳</span><br><span class="line"></span><br><span class="line">    $pipe=$redis-&gt;multi(Redis::PIPELINE); //使用管道提升性能</span><br><span class="line">    $pipe-&gt;zadd($key, $now, $now); //value 和 score 都使用毫秒时间戳</span><br><span class="line">    $pipe-&gt;zremrangebyscore($key, 0, $now - $period); //移除时间窗口之前的行为记录，剩下的都是时间窗口内的</span><br><span class="line">    $pipe-&gt;zcard($key);  //获取窗口内的行为数量</span><br><span class="line">    $pipe-&gt;expire($key, $period + 1);  //多加一秒过期时间</span><br><span class="line">    $replies = $pipe-&gt;exec();</span><br><span class="line">    return $replies[2] &lt;= $maxCount;</span><br><span class="line">&#125;</span><br><span class="line">for ($i=0; $i&lt;20; $i++)&#123;</span><br><span class="line">    var_dump(isActionAllowed(&quot;110&quot;, &quot;reply&quot;, 60*1000, 5)); //执行可以发现只有前5次是通过的</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//返回当前的毫秒时间戳</span><br><span class="line">function msectime() &#123;</span><br><span class="line">    list($msec, $sec) = explode(&apos; &apos;, microtime());</span><br><span class="line">    $msectime = (float)sprintf(&apos;%.0f&apos;, (floatval($msec) + floatval($sec)) * 1000);</span><br><span class="line">    return $msectime;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="漏桶"><a href="#漏桶" class="headerlink" title="漏桶"></a>漏桶</h4><blockquote>
+<p>漏桶(Leaky Bucket)算法思路很简单,水(请求)先进入到漏桶里,漏桶以一定的速度出水(接口有响应速率),当水流入速度过大会直接溢出(访问频率超过接口响应速率),然后就拒绝请求,可以看出漏桶算法能强行限制数据的传输速率。</p>
+</blockquote>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">class Funnel &#123;</span><br><span class="line"></span><br><span class="line">    private $capacity;</span><br><span class="line">    private $leakingRate;</span><br><span class="line">    private $leftQuote;</span><br><span class="line">    private $leakingTs;</span><br><span class="line"></span><br><span class="line">    public function __construct($capacity, $leakingRate)</span><br><span class="line">    &#123;</span><br><span class="line">        $this-&gt;capacity = $capacity;    //漏斗容量</span><br><span class="line">        $this-&gt;leakingRate = $leakingRate;//漏斗流水速率</span><br><span class="line">        $this-&gt;leftQuote = $capacity; //漏斗剩余空间</span><br><span class="line">        $this-&gt;leakingTs = time(); //上一次漏水时间</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public function makeSpace()</span><br><span class="line">    &#123;</span><br><span class="line">        $now = time();</span><br><span class="line">        $deltaTs = $now-$this-&gt;leakingTs; //距离上一次漏水过去了多久</span><br><span class="line">        $deltaQuota = $deltaTs * $this-&gt;leakingRate; //可腾出的空间</span><br><span class="line">        if($deltaQuota &lt; 1) &#123;</span><br><span class="line">            return;</span><br><span class="line">        &#125;</span><br><span class="line">        $this-&gt;leftQuote += $deltaQuota;   //增加剩余空间</span><br><span class="line">        $this-&gt;leakingTs = time();         //记录漏水时间</span><br><span class="line">        if($this-&gt;leftQuota &gt; $this-&gt;capacaty)&#123;</span><br><span class="line">            $this-&gt;leftQuote - $this-&gt;capacity;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public function watering($quota)</span><br><span class="line">    &#123;</span><br><span class="line">        $this-&gt;makeSpace(); //漏水操作</span><br><span class="line">        if($this-&gt;leftQuote &gt;= $quota) &#123;</span><br><span class="line">            $this-&gt;leftQuote -= $quota;</span><br><span class="line">            return true;</span><br><span class="line">        &#125;</span><br><span class="line">        return false;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">$funnels = [];</span><br><span class="line">global $funnel;</span><br><span class="line"></span><br><span class="line">function isActionAllowed($userId, $action, $capacity, $leakingRate)</span><br><span class="line">&#123;</span><br><span class="line">    $key = sprintf(&quot;%s:%s&quot;, $userId, $action);</span><br><span class="line">    $funnel = $GLOBALS[&apos;funnel&apos;][$key] ?? &apos;&apos;;</span><br><span class="line">    if (!$funnel) &#123;</span><br><span class="line">        $funnel  = new Funnel($capacity, $leakingRate);</span><br><span class="line">        $GLOBALS[&apos;funnel&apos;][$key] = $funnel;</span><br><span class="line">    &#125;</span><br><span class="line">    return $funnel-&gt;watering(1);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">for ($i=0; $i&lt;20; $i++)&#123;</span><br><span class="line">    var_dump(isActionAllowed(&quot;110&quot;, &quot;reply&quot;, 15, 0.5)); //执行可以发现只有前15次是通过的</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>核心逻辑就是makeSpace，在每次灌水前调用以触发漏水，给漏斗腾出空间。funnels我们可以利用Redis中的hash结构来存储对应字段，灌水时将字段取出进行逻辑运算后再存入hash结构中即可完成一次行为频度的检测。但这有个问题就是整个过程的原子性无法保证，意味着要用锁来控制，但如果加锁失败，就要重试或者放弃，这回导致性能下降和影响用户体验，同时代码复杂度也升高了，此时Redis提供了一个插件，Redis-Cell出现了。</p>
+</blockquote>
+<h4 id="redis-cell"><a href="#redis-cell" class="headerlink" title="redis-cell"></a>redis-cell</h4><p>Redis 4.0提供了一个限流Redis模块，名称为redis-cell，该模块提供漏斗算法，并提供原子的限流指令。</p>
+<p>该模块只有一条指令cl.throttle，其参数和返回值比较复杂。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">cl.throttle tom:reply 14 30 60 1</span><br><span class="line">1) (integer) 0    # 0表示允许，1表示拒绝</span><br><span class="line">2) (integer) 15    # 漏斗容量capacity</span><br><span class="line">3) (integer) 14    # 漏斗剩余空间left_quota</span><br><span class="line">4) (integer) -1    # 如果拒绝了，需要多长时间后再重试，单位秒</span><br><span class="line">5) (integer) 2    # 多长时间后，漏斗完全空出来，单位秒</span><br></pre></td></tr></table></figure>
+
+<p>该指令意思为，允许用户tom的reply行为的频率为每60s最多30次，漏斗初始容量为15（因为是从0开始计数，到14为15个），默认每个行为占据的空间为1（可选参数）。如果被拒绝，取返回数组的第四个值进行sleep即可作为重试时间，也可以异步定时任务来重试。</p>
+<h4 id="令牌漏桶"><a href="#令牌漏桶" class="headerlink" title="令牌漏桶"></a>令牌漏桶</h4><blockquote>
+<p>令牌桶算法(Token Bucket)和 Leaky Bucket 效果一样但方向相反的算法,更加容易理解.随着时间流逝,系统会按恒定1/QPS时间间隔(如果QPS=100,则间隔是10ms)往桶里加入Token(想象和漏洞漏水相反,有个水龙头在不断的加水),如果桶已经满了就不再加了.新请求来临时,会各自拿走一个Token,如果没有Token可拿了就阻塞或者拒绝服务.<br>令牌桶的另外一个好处是可以方便的改变速度. 一旦需要提高速率,则按需提高放入桶中的令牌的速率. 一般会定时(比如100毫秒)往桶中增加一定数量的令牌, 有些变种算法则实时的计算应该增加的令牌的数量.</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">class TrafficShaper</span><br><span class="line">&#123;</span><br><span class="line">    private $_config; // redis设定</span><br><span class="line">    private $_redis;  // redis对象</span><br><span class="line">    private $_queue;  // 令牌桶</span><br><span class="line">    private $_max;    // 最大令牌数</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 初始化</span><br><span class="line">     * @param Array $config redis连接设定</span><br><span class="line">     */</span><br><span class="line">    public function __construct($config, $queue, $max)</span><br><span class="line">    &#123;</span><br><span class="line">        $this-&gt;_config = $config;</span><br><span class="line">        $this-&gt;_queue = $queue;</span><br><span class="line">        $this-&gt;_max = $max;</span><br><span class="line">        $this-&gt;_redis = $this-&gt;connect();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 加入令牌</span><br><span class="line">     * @param Int $num 加入的令牌数量</span><br><span class="line">     * @return Int 加入的数量</span><br><span class="line">     */</span><br><span class="line">    public function add($num = 0)</span><br><span class="line">    &#123;</span><br><span class="line">        // 当前剩余令牌数</span><br><span class="line">        $curnum = intval($this-&gt;_redis-&gt;lSize($this-&gt;_queue));</span><br><span class="line">        // 最大令牌数</span><br><span class="line">        $maxnum = intval($this-&gt;_max);</span><br><span class="line">        // 计算最大可加入的令牌数量，不能超过最大令牌数</span><br><span class="line">        $num = $maxnum &gt;= $curnum + $num ? $num : $maxnum - $curnum;</span><br><span class="line">        // 加入令牌</span><br><span class="line">        if ($num &gt; 0) &#123;</span><br><span class="line">            $token = array_fill(0, $num, 1);</span><br><span class="line">            $this-&gt;_redis-&gt;lPush($this-&gt;_queue, ...$token);</span><br><span class="line">            return $num;</span><br><span class="line">        &#125;</span><br><span class="line">        return 0;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 获取令牌</span><br><span class="line">     * @return Boolean</span><br><span class="line">     */</span><br><span class="line">    public function get()</span><br><span class="line">    &#123;</span><br><span class="line">        return $this-&gt;_redis-&gt;rPop($this-&gt;_queue) ? true : false;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 重设令牌桶，填满令牌</span><br><span class="line">     */</span><br><span class="line">    public function reset()</span><br><span class="line">    &#123;</span><br><span class="line">        $this-&gt;_redis-&gt;delete($this-&gt;_queue);</span><br><span class="line">        $this-&gt;add($this-&gt;_max);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private function connect()</span><br><span class="line">    &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            $redis = new Redis();</span><br><span class="line">            $redis-&gt;connect($this-&gt;_config[&apos;host&apos;], $this-&gt;_config[&apos;port&apos;], $this-&gt;_config[&apos;timeout&apos;], $this-&gt;_config[&apos;reserved&apos;], $this-&gt;_config[&apos;retry_interval&apos;]);</span><br><span class="line">            if (empty($this-&gt;_config[&apos;auth&apos;])) &#123;</span><br><span class="line">                $redis-&gt;auth($this-&gt;_config[&apos;auth&apos;]);</span><br><span class="line">            &#125;</span><br><span class="line">            $redis-&gt;select($this-&gt;_config[&apos;index&apos;]);</span><br><span class="line">        &#125; catch (\RedisException $e) &#123;</span><br><span class="line">            throw new Exception($e-&gt;getMessage());</span><br><span class="line">            return false;</span><br><span class="line">        &#125;</span><br><span class="line">        return $redis;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$config = array(</span><br><span class="line">    &apos;host&apos; =&gt; &apos;localhost&apos;,</span><br><span class="line">    &apos;port&apos; =&gt; 6379,</span><br><span class="line">    &apos;index&apos; =&gt; 0,</span><br><span class="line">    &apos;auth&apos; =&gt; &apos;&apos;,</span><br><span class="line">    &apos;timeout&apos; =&gt; 1,</span><br><span class="line">    &apos;reserved&apos; =&gt; NULL,</span><br><span class="line">    &apos;retry_interval&apos; =&gt; 100,</span><br><span class="line">);</span><br><span class="line">// 令牌桶容器</span><br><span class="line">$queue = &apos;mycontainer&apos;;</span><br><span class="line"> // 最大令牌数</span><br><span class="line">$max = 5;</span><br><span class="line">// 创建TrafficShaper对象</span><br><span class="line">$oTrafficShaper = new TrafficShaper($config, $queue, $max);</span><br><span class="line">// 重设令牌桶，填满令牌</span><br><span class="line">$oTrafficShaper-&gt;reset();</span><br><span class="line">// 循环获取令牌，令牌桶内只有5个令牌，因此最后3次获取失败</span><br><span class="line">for ($i = 0; $i &lt; 8; $i++) &#123;</span><br><span class="line">    var_dump($oTrafficShaper-&gt;get());</span><br><span class="line">&#125;</span><br><span class="line">// 加入10个令牌，最大令牌为5，因此只能加入5个</span><br><span class="line">$add_num = $oTrafficShaper-&gt;add(10);</span><br><span class="line">var_dump($add_num);</span><br><span class="line">// 循环获取令牌，令牌桶内只有5个令牌，因此最后1次获取失败</span><br><span class="line">for ($i = 0; $i &lt; 6; $i++) &#123;</span><br><span class="line">    var_dump($oTrafficShaper-&gt;get());</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                    <p class="copyright-item">
+                        <span>版权声明:</span>
+                        <span>文章均原创，如有侵权，请联系删除，转载请注明出处。</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>签名:</span>
+                         <span>追求事物的真谛</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>标签:</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/redis/"># redis</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">返回</a>
+                <span>· </span>
+                <a href="/">首页</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2019/09/01/redis位图/">redis位图</a>
+            
+            
+            <a class="next" rel="next" href="/2019/09/01/redis锁/">redis锁</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© 2019  glong
+        |
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? "https://" : "http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1277816600'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s5.cnzz.com/z_stat.php%3Fid%3D1277816600%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+        </span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>

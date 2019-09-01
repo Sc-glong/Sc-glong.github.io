@@ -7,7 +7,7 @@
 
 
 
-<title>看书是一个好习惯 | glong</title>
+<title>redis位图 | glong</title>
 
 
 
@@ -170,7 +170,7 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">看书是一个好习惯</h1>
+            <h1 class="post-title">redis位图</h1>
             
                 <div class="post-meta">
                     
@@ -179,14 +179,14 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">September 1, 2019&nbsp;&nbsp;09:24:48</a>
+                        Date: <a href="#">September 1, 2019&nbsp;&nbsp;09:30:57</a>
                         </span>
                     
                     
                         <span class="post-category">
                     Category:
                             
-                                <a href="/categories/生活/">生活</a>
+                                <a href="/categories/redis/">redis</a>
                             
                         </span>
                     
@@ -195,26 +195,23 @@
         </header>
 
         <div class="post-content">
-            <h2 id="2019年阅读清单"><a href="#2019年阅读清单" class="headerlink" title="2019年阅读清单"></a>2019年阅读清单</h2><hr>
-<ul>
-<li><input checked disabled type="checkbox"> redis实现</li>
-<li><input checked disabled type="checkbox"> mysql入门</li>
-<li><input checked disabled type="checkbox"> c 语言基础</li>
-<li><input checked disabled type="checkbox"> mongoDB初级篇</li>
+            <h3 id="redis-位图"><a href="#redis-位图" class="headerlink" title="redis 位图"></a>redis 位图</h3><h4 id="什么是位图"><a href="#什么是位图" class="headerlink" title="什么是位图"></a>什么是位图</h4><blockquote>
+<p>位图并不是一种特殊的数据结构，其实本质上是二进制字符串，也可以看做是 byte 数组。可以使用普通的 get/set 直接获取和设置整个位图的内容，也可以使用位图操作 getbit/setbit 等将 byte 数组看成「位数组」来处理。</p>
+</blockquote>
+<h4 id="位图的优势"><a href="#位图的优势" class="headerlink" title="位图的优势"></a>位图的优势</h4><ul>
+<li>基于最小的单位bit进行存储，所以非常省空间。</li>
+<li>设置时候时间复杂度O(1)、读取时候时间复杂度O(n)，操作是非常快的</li>
+<li>二进制数据的存储，进行相关计算的时候非常快</li>
+<li>方便扩容</li>
 </ul>
-<hr>
-<ul>
-<li><input disabled type="checkbox"> mongodb权威指南</li>
-<li><input disabled type="checkbox"> 算法4</li>
-<li><input disabled type="checkbox"> java spring架构</li>
-<li><input disabled type="checkbox"> headFisrt设计模式</li>
-<li><input disabled type="checkbox"> python基础</li>
-<li><input disabled type="checkbox"> 计算机操作系统</li>
-<li><input disabled type="checkbox"> 网络原理</li>
-<li><input disabled type="checkbox"> linux</li>
+<h4 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h4><ul>
+<li>用户签到</li>
+<li>用户在线状态</li>
+<li>统计活跃用户</li>
+<li>各种状态值</li>
 </ul>
-<hr>
-<p>我感谢自己平凡，敢爱敢恨没负担。<br>我感谢自己不凡，可爱可恨都包揽。</p>
+<h4 id="位图操作"><a href="#位图操作" class="headerlink" title="位图操作"></a>位图操作</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">setbit key offset value  //给位图指定索引设置值</span><br><span class="line">getbit key offset        //获取第offset位的二进制 </span><br><span class="line">bitcount key [start end] //获取位图指定范围中（start 到end）1的个数  </span><br><span class="line">bitop op destkey key [key...] #做多个Bitmap的and(交集)、or(并集)、not(非)、xor(异或)操作并将结果保存在destkey中  </span><br><span class="line">bitpos key targetBit [start] [end] #计算位图指定范围(start)到（end）的位置</span><br></pre></td></tr></table></figure>
+
 
         </div>
 
@@ -243,7 +240,7 @@
                 <span class="tag">
                     
                     
-                        <a href="/tags/生活/"># 生活</a>
+                        <a href="/tags/redis/"># redis</a>
                     
                         
                 </span>
@@ -256,10 +253,8 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2019/09/01/mongodb使用/">mongodb使用</a>
             
-            
-            <a class="next" rel="next" href="/2019/08/24/爬楼梯算法/">爬楼梯算法</a>
+            <a class="next" rel="next" href="/2019/09/01/redis限流/">redis限流</a>
             
         </section>
 
