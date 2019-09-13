@@ -7,7 +7,7 @@
 
 
 
-<title>redis位图 | glong</title>
+<title>看完阿里20周年会有感 | glong</title>
 
 
 
@@ -103,74 +103,11 @@
             <div class="container">
     
     
-        <div class="post-toc">
-    <div class="tocbot-list">
-    </div>
-    <div class="tocbot-list-menu">
-        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
-        <a onclick="go_top()">返回顶部</a>
-        <a onclick="go_bottom()">Go to bottom</a>
-    </div>
-</div>
-
-<script>
-    document.ready(
-        function () {
-            tocbot.init({
-                tocSelector: '.tocbot-list',
-                contentSelector: '.post-content',
-                headingSelector: 'h1, h2, h3, h4, h5',
-                collapseDepth: 1,
-                orderedList: false,
-                scrollSmooth: true,
-            })
-        }
-    )
-
-    function expand_toc() {
-        var b = document.querySelector(".tocbot-toc-expand");
-        tocbot.init({
-            tocSelector: '.tocbot-list',
-            contentSelector: '.post-content',
-            headingSelector: 'h1, h2, h3, h4, h5',
-            collapseDepth: 6,
-            orderedList: false,
-            scrollSmooth: true,
-        });
-        b.setAttribute("onclick", "collapse_toc()");
-        b.innerHTML = "Collapse all"
-    }
-
-    function collapse_toc() {
-        var b = document.querySelector(".tocbot-toc-expand");
-        tocbot.init({
-            tocSelector: '.tocbot-list',
-            contentSelector: '.post-content',
-            headingSelector: 'h1, h2, h3, h4, h5',
-            collapseDepth: 1,
-            orderedList: false,
-            scrollSmooth: true,
-        });
-        b.setAttribute("onclick", "expand_toc()");
-        b.innerHTML = "Expand all"
-    }
-
-    function go_top() {
-        window.scrollTo(0, 0);
-    }
-
-    function go_bottom() {
-        window.scrollTo(0, document.body.scrollHeight);
-    }
-
-</script>
-
-    
 
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">redis位图</h1>
+            <h1 class="post-title">看完阿里20周年会有感</h1>
             
                 <div class="post-meta">
                     
@@ -179,14 +116,14 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">September 1, 2019&nbsp;&nbsp;09:30:57</a>
+                        Date: <a href="#">September 13, 2019&nbsp;&nbsp;12:58:19</a>
                         </span>
                     
                     
                         <span class="post-category">
                     Category:
                             
-                                <a href="/categories/redis/">redis</a>
+                                <a href="/categories/生活/">生活</a>
                             
                         </span>
                     
@@ -195,23 +132,7 @@
         </header>
 
         <div class="post-content">
-            <h3 id="redis-位图"><a href="#redis-位图" class="headerlink" title="redis 位图"></a>redis 位图</h3><h4 id="什么是位图"><a href="#什么是位图" class="headerlink" title="什么是位图"></a>什么是位图</h4><blockquote>
-<p>位图并不是一种特殊的数据结构，其实本质上是二进制字符串，也可以看做是 byte 数组。可以使用普通的 get/set 直接获取和设置整个位图的内容，也可以使用位图操作 getbit/setbit 等将 byte 数组看成「位数组」来处理。</p>
-</blockquote>
-<h4 id="位图的优势"><a href="#位图的优势" class="headerlink" title="位图的优势"></a>位图的优势</h4><ul>
-<li>基于最小的单位bit进行存储，所以非常省空间。</li>
-<li>设置时候时间复杂度O(1)、读取时候时间复杂度O(n)，操作是非常快的</li>
-<li>二进制数据的存储，进行相关计算的时候非常快</li>
-<li>方便扩容</li>
-</ul>
-<h4 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h4><ul>
-<li>用户签到</li>
-<li>用户在线状态</li>
-<li>统计活跃用户</li>
-<li>各种状态值</li>
-</ul>
-<h4 id="位图操作"><a href="#位图操作" class="headerlink" title="位图操作"></a>位图操作</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">setbit key offset value  //给位图指定索引设置值</span><br><span class="line">getbit key offset        //获取第offset位的二进制 </span><br><span class="line">bitcount key [start end] //获取位图指定范围中（start 到end）1的个数  </span><br><span class="line">bitop op destkey key [key...] #做多个Bitmap的and(交集)、or(并集)、not(非)、xor(异或)操作并将结果保存在destkey中  </span><br><span class="line">bitpos key targetBit [start] [end] #计算位图指定范围(start)到（end）的位置</span><br></pre></td></tr></table></figure>
-
+            <p>  其实我对于互联网公司的的概念并不是很清晰，仅仅依托于互联网？不得而知。<br>  刚出学校的我，感觉是全新的世界，膜拜各种互联网技术，各种技术大佬说话间<br>  漏出的自信，感觉他们在追寻技术的真谛，自己也想着走他们的路，开始规划各种<br>  技术路线，各种技术栈的接触，感觉深不可测，想象着自己成为大牛的样子，但是现实总是残酷，<br>  在工作上在别人看来小的需求，自己依然会犯错。这就是我这样一个小菜鸟的IT生涯开始。<br>  “让天下没有难做的生意”，这句话听起来通俗易懂，其实包含着集团的核心理念。其实这跟我们在<br>  做人做事是一个道理。做人，向要做一个什么样的人？做事，想要做成什么样的事？”有梦想的人不一定<br>  走很远，走很远的人一定有梦想”，我第一次听到”远景”这个词语，是在上项目管理课吧，然后<br>  我感觉最近总是听到人说到这个词。其实那时我就明白，愿景就是你想要完成事情的最终模样，也就是<br>  最后结果。公司有核心理念，有愿景，有氛围，有六脉神剑，宣扬这些目的是什么？一方面为了加油打气，提高产出；<br>  另一方面我觉得最重要的是弘扬集团文化，提升凝聚力，所谓”劲往一处使”。不光公司有愿景，我觉得人<br>  也应该有愿景，我短期的愿景，长期的愿景。</p>
 
         </div>
 
@@ -240,7 +161,7 @@
                 <span class="tag">
                     
                     
-                        <a href="/tags/redis/"># redis</a>
+                        <a href="/tags/生活/"># 生活</a>
                     
                         
                 </span>
@@ -253,10 +174,8 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2019/09/13/看完阿里20周年会有感/">看完阿里20周年会有感</a>
             
-            
-            <a class="next" rel="next" href="/2019/09/01/redis限流/">redis限流</a>
+            <a class="next" rel="next" href="/2019/09/01/redis位图/">redis位图</a>
             
         </section>
 
