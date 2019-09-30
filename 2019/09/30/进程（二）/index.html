@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+
+
+<title>进程（二） | glong</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">glong&#39; blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">文档</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于我</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">glong&#39; blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">文档</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于我</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">返回顶部</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">进程（二）</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">glong</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">September 30, 2019&nbsp;&nbsp;11:04:18</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/nginx-linux/">nginx&linux</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h4 id="了解进程是如何运行的，最起码了解一个进程内核是如何调用的，了解常规的调度策略。"><a href="#了解进程是如何运行的，最起码了解一个进程内核是如何调用的，了解常规的调度策略。" class="headerlink" title="了解进程是如何运行的，最起码了解一个进程内核是如何调用的，了解常规的调度策略。"></a>了解进程是如何运行的，最起码了解一个进程内核是如何调用的，了解常规的调度策略。</h4><h4 id="了解内核队列调度算法【了解何谓cpu虚拟化，内存虚拟化】"><a href="#了解内核队列调度算法【了解何谓cpu虚拟化，内存虚拟化】" class="headerlink" title="了解内核队列调度算法【了解何谓cpu虚拟化，内存虚拟化】"></a>了解内核队列调度算法【了解何谓cpu虚拟化，内存虚拟化】</h4><h4 id="了解进程组，进组组长，会话，会话首领，控制终端，守护进程，前台进程组，后台进程组，作业的相关概念"><a href="#了解进程组，进组组长，会话，会话首领，控制终端，守护进程，前台进程组，后台进程组，作业的相关概念" class="headerlink" title="了解进程组，进组组长，会话，会话首领，控制终端，守护进程，前台进程组，后台进程组，作业的相关概念"></a>了解进程组，进组组长，会话，会话首领，控制终端，守护进程，前台进程组，后台进程组，作业的相关概念</h4><h4 id="了解文件流IO的操作"><a href="#了解文件流IO的操作" class="headerlink" title="了解文件流IO的操作"></a>了解文件流IO的操作</h4><h4 id="了解进程信息有哪些，如有效用户，真实用户，有效组，真实组的区别是什么，了解进程内存模型等。"><a href="#了解进程信息有哪些，如有效用户，真实用户，有效组，真实组的区别是什么，了解进程内存模型等。" class="headerlink" title="了解进程信息有哪些，如有效用户，真实用户，有效组，真实组的区别是什么，了解进程内存模型等。"></a>了解进程信息有哪些，如有效用户，真实用户，有效组，真实组的区别是什么，了解进程内存模型等。</h4><h4 id="了解可执行文件内存模型，内核分配内存原理。"><a href="#了解可执行文件内存模型，内核分配内存原理。" class="headerlink" title="了解可执行文件内存模型，内核分配内存原理。"></a>了解可执行文件内存模型，内核分配内存原理。</h4><h4 id="了解tcp-udp-ip，了解应用层，传输层，数据链路层【网卡驱动原理】，ARP这些，了解tcp和udp的区别，了解tcp和udp"><a href="#了解tcp-udp-ip，了解应用层，传输层，数据链路层【网卡驱动原理】，ARP这些，了解tcp和udp的区别，了解tcp和udp" class="headerlink" title="了解tcp,udp,ip，了解应用层，传输层，数据链路层【网卡驱动原理】，ARP这些，了解tcp和udp的区别，了解tcp和udp"></a>了解tcp,udp,ip，了解应用层，传输层，数据链路层【网卡驱动原理】，ARP这些，了解tcp和udp的区别，了解tcp和udp</h4><h3 id="连接时的状态转移情况，了解如何抓包，如何监听tcp数据包传输，了解相关socket-api"><a href="#连接时的状态转移情况，了解如何抓包，如何监听tcp数据包传输，了解相关socket-api" class="headerlink" title="连接时的状态转移情况，了解如何抓包，如何监听tcp数据包传输，了解相关socket api"></a>连接时的状态转移情况，了解如何抓包，如何监听tcp数据包传输，了解相关socket api</h3><h4 id="了解中断系统，便于理解信号控制原理。"><a href="#了解中断系统，便于理解信号控制原理。" class="headerlink" title="了解中断系统，便于理解信号控制原理。"></a>了解中断系统，便于理解信号控制原理。</h4><h4 id="了解IO处理单元，了解一些reactor-proactor"><a href="#了解IO处理单元，了解一些reactor-proactor" class="headerlink" title="了解IO处理单元，了解一些reactor,proactor"></a>了解IO处理单元，了解一些reactor,proactor</h4><h4 id="了解IO模型，了解同步，异步，阻塞，非阻塞【最好去搞清楚进程如何控制，进程状态，进程调度算法这些】"><a href="#了解IO模型，了解同步，异步，阻塞，非阻塞【最好去搞清楚进程如何控制，进程状态，进程调度算法这些】" class="headerlink" title="了解IO模型，了解同步，异步，阻塞，非阻塞【最好去搞清楚进程如何控制，进程状态，进程调度算法这些】"></a>了解IO模型，了解同步，异步，阻塞，非阻塞【最好去搞清楚进程如何控制，进程状态，进程调度算法这些】</h4><h4 id="了解流的概念，知道什么是文件流，输入流，输出流，这些玩意，了解轮询这些"><a href="#了解流的概念，知道什么是文件流，输入流，输出流，这些玩意，了解轮询这些" class="headerlink" title="了解流的概念，知道什么是文件流，输入流，输出流，这些玩意，了解轮询这些"></a>了解流的概念，知道什么是文件流，输入流，输出流，这些玩意，了解轮询这些</h4><h4 id="了解异步事件驱动。"><a href="#了解异步事件驱动。" class="headerlink" title="了解异步事件驱动。"></a>了解异步事件驱动。</h4><h4 id="了解http请求和响应的格式【便于你编写符合该协议的响应代码】，了解之后你才了解所谓的自定义协议。"><a href="#了解http请求和响应的格式【便于你编写符合该协议的响应代码】，了解之后你才了解所谓的自定义协议。" class="headerlink" title="了解http请求和响应的格式【便于你编写符合该协议的响应代码】，了解之后你才了解所谓的自定义协议。"></a>了解http请求和响应的格式【便于你编写符合该协议的响应代码】，了解之后你才了解所谓的自定义协议。</h4>
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                    <p class="copyright-item">
+                        <span>版权声明:</span>
+                        <span>文章均原创，如有侵权，请联系删除，转载请注明出处。</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>签名:</span>
+                         <span>追求事物的真谛</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>标签:</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/nginx-linux/"># nginx&linux</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">返回</a>
+                <span>· </span>
+                <a href="/">首页</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2019/09/30/如何查看linux系统负载/">如何查看linux系统负载</a>
+            
+            
+            <a class="next" rel="next" href="/2019/09/30/进程（一）/">进程（一）</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© 2019  glong
+        |
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? "https://" : "http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1277816600'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s5.cnzz.com/z_stat.php%3Fid%3D1277816600%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+        </span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>

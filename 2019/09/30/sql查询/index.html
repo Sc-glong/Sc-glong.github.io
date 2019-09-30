@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+
+
+<title>sql查询 | glong</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">glong&#39; blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">文档</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于我</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">glong&#39; blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">文档</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于我</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">返回顶部</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">sql查询</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">glong</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">September 30, 2019&nbsp;&nbsp;11:00:52</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/数据库/">数据库</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>按条件搜索列表</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"> $end   = date(&apos;Y-m-d H:i:s&apos;);</span><br><span class="line">$start = date(&quot;Y-m-d H:i:s&quot;, strtotime(&quot;-6 month&quot;));</span><br><span class="line">$query = $this-&gt;MsgReceiveUserLogModel-&gt;join(&apos;msg_push_task&apos;, &apos;msg_receive_user_log.msg_id&apos;, &apos;=&apos;, &apos;msg_push_task.id&apos;)</span><br><span class="line">    -&gt;select(&apos;msg_push_task.*&apos;, &apos;msg_receive_user_log.msg_status&apos;, &apos;msg_receive_user_log.receive_aid&apos;,&apos;msg_receive_user_log.id as inform_id&apos;)</span><br><span class="line">    -&gt;whereBetween(&apos;msg_push_task.create_time&apos;, [$start, $end])</span><br><span class="line">    -&gt;where(&apos;receive_aid&apos;, $param[&apos;aid&apos;]);</span><br><span class="line">if ($param[&apos;project_type&apos;] != -1) &#123;</span><br><span class="line">    $query-&gt;where(&apos;project_type&apos;, $param[&apos;project_type&apos;]);</span><br><span class="line">&#125;</span><br><span class="line">if ($param[&apos;msg_level&apos;] != -1) &#123;</span><br><span class="line">    $query-&gt;where(&apos;msg_level&apos;, $param[&apos;msg_level&apos;]);</span><br><span class="line">&#125;</span><br><span class="line">if ($param[&apos;msg_status&apos;] != -1) &#123;</span><br><span class="line">    $query-&gt;where(&apos;msg_status&apos;, $param[&apos;msg_status&apos;]);</span><br><span class="line">&#125;</span><br><span class="line">if (!empty($param[&apos;msg_content&apos;])) &#123;</span><br><span class="line">    //$query-&gt;where(&apos;title&apos;, &apos;like&apos;, &apos;%&apos; . $param[&apos;msg_content&apos;] . &apos;%&apos;);</span><br><span class="line">    //orwhere(&apos;summary&apos;, &apos;like&apos;, &apos;%&apos; . $param[&apos;msg_content&apos;] . &apos;%&apos;);</span><br><span class="line">    $query= $query-&gt;where(function ($query) use ($param)&#123;</span><br><span class="line">        $query-&gt;where(&apos;title&apos;, &apos;like&apos;, &apos;%&apos; . $param[&apos;msg_content&apos;] . &apos;%&apos;)</span><br><span class="line">            -&gt;orwhere(&apos;summary&apos;, &apos;like&apos;, &apos;%&apos; . $param[&apos;msg_content&apos;] . &apos;%&apos;);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line">dump($query-&gt;toSql());die;</span><br><span class="line">$total      = $query-&gt;count();</span><br><span class="line">$searchList = $query-&gt;orderBy(&apos;msg_receive_user_log.msg_status&apos;, &apos;asc&apos;)</span><br><span class="line">    -&gt;orderBy(&apos;msg_push_task.pre_push_time&apos;, &apos;desc&apos;)</span><br><span class="line">    -&gt;offset(($param[&apos;cur_page&apos;] - 1) * $param[&apos;limit&apos;])</span><br><span class="line">    -&gt;limit($param[&apos;limit&apos;])</span><br><span class="line">    -&gt;get()-&gt;toArray();</span><br></pre></td></tr></table></figure>
+
+<p>对于较长的查询，可以通过多阶段拼接方式，还可以兼容条件搜索。<br>当遇到子查询时，使用闭包的方式进行查询</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$query= $query-&gt;where(function ($query) use ($param)&#123;</span><br><span class="line">        $query-&gt;where(&apos;title&apos;, &apos;like&apos;, &apos;%&apos; . $param[&apos;msg_content&apos;] . &apos;%&apos;)</span><br><span class="line">            -&gt;orwhere(&apos;summary&apos;, &apos;like&apos;, &apos;%&apos; . $param[&apos;msg_content&apos;] . &apos;%&apos;);</span><br><span class="line">    &#125;);</span><br></pre></td></tr></table></figure>
+
+<p>具体sql如下：</p>
+<blockquote>
+<p>“select <code>fudao_msg_push_task</code>.*, <code>fudao_msg_receive_user_log</code>.<code>msg_status</code>, <code>fudao_msg_receive_user_log</code>.<code>receive_aid</code>, <code>fudao_msg_receive_user_log</code>.<code>id</code> as <code>inform_id</code> from <code>fudao_msg_receive_user_log</code> inner join <code>fudao_msg_push_task</code> on <code>fudao_msg_receive_user_log</code>.<code>msg_id</code> = <code>fudao_msg_push_task</code>.<code>id</code> where <code>fudao_msg_push_task</code>.<code>create_time</code> between ? and ? and <code>receive_aid</code> = ? and (<code>title</code> like ? or <code>summary</code> like ?)”</p>
+</blockquote>
+<h4 id="mergeBindings的用法"><a href="#mergeBindings的用法" class="headerlink" title="mergeBindings的用法"></a>mergeBindings的用法</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$sub = Abc::where(..)-&gt;groupBy(..); // Eloquent Builder instance</span><br><span class="line"></span><br><span class="line">$count = DB::table( DB::raw(&quot;(&#123;$sub-&gt;toSql()&#125;) as sub&quot;) )</span><br><span class="line">    -&gt;mergeBindings($sub-&gt;getQuery()) // you need to get underlying Query Builder</span><br><span class="line">    -&gt;count();</span><br></pre></td></tr></table></figure>
+
+<p>注意你需要以正确的顺序合并绑定。如果您有其他绑定子句，您必须将它们放在mergeBindings之后：</p>
+<blockquote>
+<p>$count = DB::table( DB::raw(“({$sub-&gt;toSql()}) as sub”) )</p>
+</blockquote>
+<pre><code>// -&gt;where(..) wrong
+
+-&gt;mergeBindings($sub-&gt;getQuery()) // you need to get underlying Query Builder
+
+// -&gt;where(..) correct
+
+-&gt;count();</code></pre>
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                    <p class="copyright-item">
+                        <span>版权声明:</span>
+                        <span>文章均原创，如有侵权，请联系删除，转载请注明出处。</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>签名:</span>
+                         <span>追求事物的真谛</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>标签:</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/数据库/"># 数据库</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">返回</a>
+                <span>· </span>
+                <a href="/">首页</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2019/09/30/进程（一）/">进程（一）</a>
+            
+            
+            <a class="next" rel="next" href="/2019/09/13/生活习惯养成/">生活习惯养成</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© 2019  glong
+        |
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? "https://" : "http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1277816600'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s5.cnzz.com/z_stat.php%3Fid%3D1277816600%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+        </span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>
