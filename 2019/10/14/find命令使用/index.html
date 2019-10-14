@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+
+
+<title>find命令使用 | glong</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">glong&#39; blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">文档</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于我</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">glong&#39; blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">文档</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于我</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">返回顶部</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">find命令使用</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">glong</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">October 14, 2019&nbsp;&nbsp;18:14:36</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/nginx-linux/">nginx&linux</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h3 id="find使用"><a href="#find使用" class="headerlink" title="find使用"></a>find使用</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">find / -name filename 再根目录里面搜索文件名为filename的文件</span><br><span class="line">find /etc -name *s*在目录里面搜索带有s的文件</span><br><span class="line">find /etc -name *S 在目录里面搜索以s结尾的文件</span><br><span class="line">find /etc -name s*在目录里面搜索以s开头的文件</span><br><span class="line">find / -amin -10在系统中搜索最后１０分钟访问的文件</span><br><span class="line">find / -atime -2查找在系统中最后４８小时访问的文件</span><br><span class="line">find / -empty 查找在系统中为空的文件或者是文件夹</span><br><span class="line">find / -group groupname 查找在系统中属于groupname的文件</span><br><span class="line">find / -mmin -5查找在系统中最后５分钟修改过的文件</span><br><span class="line">find / -mtime -1查找在系统中最后２４小时修改过的文件</span><br><span class="line">find /－nouser查找在系统中属于费用户的文件</span><br><span class="line">find / -user username 查找在系统中属于username的文件</span><br><span class="line">find / -ctime -1查找在系统中最后２４小时被改变状态的文件</span><br><span class="line">find / -fstype type查找在系统中文件类型为？的文件</span><br><span class="line">find / -user user１name -or -useruser２name查找在系统中属于user1name或着属于user2name的文件</span><br><span class="line">find / -user user1name -and-user2name在系统中查找既属于user1name又属于user2name用户的文件．</span><br></pre></td></tr></table></figure>
+
+<h3 id="find命令选项"><a href="#find命令选项" class="headerlink" title="find命令选项"></a>find命令选项</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">-name</span><br><span class="line">按照文件名查找文件。</span><br><span class="line">-perm</span><br><span class="line">按照文件权限来查找文件。</span><br><span class="line">-prune</span><br><span class="line">使用这一选项可以使find命令不在当前指定的目录中查找，如果同时使用-depth选项，那么-prune将被find命令忽略。</span><br><span class="line">-user</span><br><span class="line">按照文件属主来查找文件。</span><br><span class="line">-group</span><br><span class="line">按照文件所属的组来查找文件。</span><br><span class="line">-mtime -n +n</span><br><span class="line">按照文件的更改时间来查找文件， - n表示文件更改时间距现在n天以内，+n表示文件更改时间距现在n天以前。find命令还有-atime和-ctime 选项，但它们都和-m time选项。</span><br><span class="line">-nogroup</span><br><span class="line">查找无有效所属组的文件，即该文件所属的组在/etc/groups中不存在。</span><br><span class="line">-nouser</span><br><span class="line">查找无有效属主的文件，即该文件的属主在/etc/passwd中不存在。</span><br><span class="line">-newer file1 ! file2</span><br><span class="line">查找更改时间比文件file1新但比文件file2旧的文件。</span><br><span class="line">-type</span><br><span class="line">查找某一类型的文件，诸如：</span><br><span class="line">b - 块设备文件。</span><br><span class="line">d - 目录。</span><br><span class="line">c - 字符设备文件。</span><br><span class="line">p - 管道文件。</span><br><span class="line">l - 符号链接文件。</span><br><span class="line">f - 普通文件。</span><br><span class="line">-size n：[c] 查找文件长度为n块的文件，带有c时表示文件长度以字节计。</span><br><span class="line">-depth：在查找文件时，首先查找当前目录中的文件，然后再在其子目录中查找。</span><br><span class="line">-fstype：查找位于某一类型文件系统中的文件，这些文件系统类型通常可以在配置文件/etc/fstab中找到，该配置文件中包含了本系统中有关文件系统的信息。</span><br><span class="line">-mount：在查找文件时不跨越文件系统mount点。</span><br><span class="line">-follow：如果find命令遇到符号链接文件，就跟踪至链接所指向的文件。</span><br><span class="line">-cpio：对匹配的文件使用cpio命令，将这些文件备份到磁带设备中。</span><br><span class="line"></span><br><span class="line">    -amin n</span><br><span class="line">　　查找系统中最后N分钟访问的文件</span><br><span class="line">　　-atime n</span><br><span class="line">　　查找系统中最后n*24小时访问的文件</span><br><span class="line">　　-cmin n</span><br><span class="line">　　查找系统中最后N分钟被改变文件状态的文件</span><br><span class="line">　　-ctime n</span><br><span class="line">　　查找系统中最后n*24小时被改变文件状态的文件</span><br><span class="line">  　-mmin n</span><br><span class="line">　　查找系统中最后N分钟被改变文件数据的文件</span><br><span class="line">　　-mtime n</span><br><span class="line">　　查找系统中最后n*24小时被改变文件数据的文件</span><br></pre></td></tr></table></figure>
+
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                    <p class="copyright-item">
+                        <span>版权声明:</span>
+                        <span>文章均原创，如有侵权，请联系删除，转载请注明出处。</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>签名:</span>
+                         <span>追求事物的真谛</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>标签:</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/nginx-linux/"># nginx&linux</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">返回</a>
+                <span>· </span>
+                <a href="/">首页</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2019/10/14/supervisor/">supervisor</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© 2019  glong
+        |
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? "https://" : "http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1277816600'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s5.cnzz.com/z_stat.php%3Fid%3D1277816600%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+        </span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>

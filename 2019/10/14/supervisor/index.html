@@ -7,7 +7,7 @@
 
 
 
-<title>laravel的事务与锁 | glong</title>
+<title>supervisor | glong</title>
 
 
 
@@ -170,7 +170,7 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">laravel的事务与锁</h1>
+            <h1 class="post-title">supervisor</h1>
             
                 <div class="post-meta">
                     
@@ -179,14 +179,14 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">October 14, 2019&nbsp;&nbsp;18:10:56</a>
+                        Date: <a href="#">October 14, 2019&nbsp;&nbsp;18:13:15</a>
                         </span>
                     
                     
                         <span class="post-category">
                     Category:
                             
-                                <a href="/categories/数据库/">数据库</a>
+                                <a href="/categories/nginx-linux/">nginx&linux</a>
                             
                         </span>
                     
@@ -195,20 +195,23 @@
         </header>
 
         <div class="post-content">
-            <h3 id="方法一"><a href="#方法一" class="headerlink" title="方法一"></a>方法一</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">try&#123;</span><br><span class="line">    DB::beginTransaction();</span><br><span class="line"></span><br><span class="line">    //span...</span><br><span class="line">    </span><br><span class="line">    DB::commit();</span><br><span class="line">&#125;catch(\Exception $e)&#123;</span><br><span class="line"></span><br><span class="line">    DB::rollback();</span><br><span class="line">    //span..</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="方法二"><a href="#方法二" class="headerlink" title="方法二"></a>方法二</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$query = function () use ($param)&#123;</span><br><span class="line">    </span><br><span class="line">    //span...</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">$this-&gt;transactionDB($query);</span><br></pre></td></tr></table></figure>
-
-<h3 id="锁的使用"><a href="#锁的使用" class="headerlink" title="锁的使用"></a>锁的使用</h3><blockquote>
-<p>需要注意的是，发起者必须在 transaction 里上锁才有效，如果不是在 transaction 中，上锁是无效的。</p>
-</blockquote>
-<ul>
-<li>sharedLock 对应的是 lock in share mode  </li>
-<li>lockForUpdate 对应的是 for update</li>
+            <h3 id="什么是supervisor"><a href="#什么是supervisor" class="headerlink" title="什么是supervisor"></a>什么是supervisor</h3><p>Supervisor 是一个 Python 写的进程管理工具，有时一个进程需要在后台运行，并且意外挂掉后能够自动重启，就需要这么一个管理进程的工具。在 Laravel 开发中，也经常使用到队列监听，可以配合 Supervisor 来管理 Laravel 队列进程。</p>
+<h3 id="supervisor的安装"><a href="#supervisor的安装" class="headerlink" title="supervisor的安装"></a>supervisor的安装</h3><ul>
+<li>sudo pip install supervisor</li>
+<li>sudo apt–get install supervisor</li>
 </ul>
-<h3 id="onWriteConnection的使用"><a href="#onWriteConnection的使用" class="headerlink" title="onWriteConnection的使用"></a>onWriteConnection的使用</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$result = $this-&gt;uesrsInfoModel::onWriteConnection-&gt;where(&apos;status&apos;,1)-&gt;get();</span><br></pre></td></tr></table></figure>
+<h3 id="Supervisor的配置"><a href="#Supervisor的配置" class="headerlink" title="Supervisor的配置"></a>Supervisor的配置</h3><p>运行这个命令可以生成一个默认的配置文件：</p>
+<p>echo_supervisord_conf&gt;/etc/supervisord.conf<br>生成成功后，打开编辑这个文件，把最后的 include 块的注释打开，并修改如下：</p>
+<p>[include]<br>files=/etc/supervisor/*.conf<br>新增的 Supervisor 配置文件放在 /etc/supervisor 目录下，并且以 conf 结尾。</p>
+<p>这时我们使用新的配置文件来启动 Supervisor：</p>
+<p>supervisord –c /etc/supervisord.conf 启动进程<br>如果提示已经有进程在运行，那么先 kill 掉它</p>
+<h3 id="添加配置文件"><a href="#添加配置文件" class="headerlink" title="添加配置文件"></a>添加配置文件</h3><p>在/etc/supervisor目下新增配置文件<br>如：fudao_crm.conf</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[program:fudao_crm_import_clue]  </span><br><span class="line">user=wenba  </span><br><span class="line">command=/data/soft/php-fpm_9000/bin/php   /data/app/fudao_crm/artisan queue:work import_clue --sleep=3 --tries=3 --daemon  </span><br><span class="line">events=PROCESS_STATE_EXITED  </span><br><span class="line">redirect_stderr=true  </span><br><span class="line">autorestart=true  </span><br><span class="line">autostart=true  </span><br><span class="line">stdout_logfile=/data/logs/fudao_crm/fudao_crm_import_clue.log</span><br></pre></td></tr></table></figure>
 
-<p>粘这段代码的意义在于说明，在某些逻辑中需要使用加锁插入，而普通的查询就被阻塞了，此时可用onWriteConnection强制写连接去查询。</p>
+<h3 id="启动队列进程监听"><a href="#启动队列进程监听" class="headerlink" title="启动队列进程监听"></a>启动队列进程监听</h3><p>sudo supervisorctl reread</p>
+<p>sudo supervisorctl update</p>
+<p>sudo supervisorctl start laravel–worker:*</p>
+<p>sudo supervisorctl restart all</p>
 
         </div>
 
@@ -237,7 +240,7 @@
                 <span class="tag">
                     
                     
-                        <a href="/tags/数据库/"># 数据库</a>
+                        <a href="/tags/nginx-linux/"># nginx&linux</a>
                     
                         
                 </span>
@@ -250,10 +253,10 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2019/10/14/supervisor/">supervisor</a>
+                <a class="prev" rel="prev" href="/2019/10/14/find命令使用/">find命令使用</a>
             
             
-            <a class="next" rel="next" href="/2019/10/14/sql数据表设计原则/">sql数据表设计原则</a>
+            <a class="next" rel="next" href="/2019/10/14/laravel的事务与锁/">laravel的事务与锁</a>
             
         </section>
 
