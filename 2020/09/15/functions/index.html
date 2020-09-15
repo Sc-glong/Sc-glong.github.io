@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+
+
+<title>functions | glong</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">glong&#39; blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">文档</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于我</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">glong&#39; blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">文档</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于我</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">functions</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">glong</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">September 15, 2020&nbsp;&nbsp;15:42:31</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/php-basic/">php basic</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <pre><code>array_walk($array,$function);    对数组中的每个元素应用用户自定义函数：
+
+array_map($cllback,$array);   为数组的每个元素应用回调函数
+返回数组，是为 array1 每个元素应用 callback函数之后的数组
+
+array_filter($array,$collback);   用回调函数过滤数组的值
+该函数把输入数组中的每个键值传给回调函数。如果回调函数返回 true，
+则把输入数组中的当前键值返回结果数组中。数组键名保持不变。
+
+
+$aaa = [1,2,3,4,5,6];
+$_aa = range(0,5,2);
+
+list($a,$b,$c) = [&quot;a&quot;,&quot;b&quot;,&quot;c&quot;]
+
+ctype_alnum(string $next):bool   检查所给字符串是否全部为字母和数字
+
+array_flatten 函数将多维数组扁平化成一维。
+
+str_plural 函数转换字符串成复数形。该函数目前仅支持英文：
+$plural = str_plural(&apos;car&apos;);
+// cars
+$plural = str_plural(&apos;child&apos;);
+// children
+$plural = str_plural(&apos;child&apos;, 2);
+// children
+$plural = str_plural(&apos;child&apos;, 1);
+// child
+
+
+$input_array = array(&apos;a&apos;, &apos;b&apos;, &apos;c&apos;, &apos;d&apos;, &apos;e&apos;);
+print_r(array_chunk($input_array, 2));
+print_r(array_chunk($input_array, 2, true));
+Array
+(
+    [0] =&gt; Array
+        (
+            [0] =&gt; a
+            [1] =&gt; b
+        )
+        [1] =&gt; Array
+        (
+            [0] =&gt; c
+            [1] =&gt; d
+        )
+    [2] =&gt; Array
+        (
+            [0] =&gt; e
+        )
+)
+Array
+(
+    [0] =&gt; Array
+        (
+            [0] =&gt; a
+            [1] =&gt; b
+        )
+    [1] =&gt; Array
+        (
+            [2] =&gt; c
+            [3] =&gt; d
+        )
+    [2] =&gt; Array
+        (
+            [4] =&gt; e
+        )
+)
+array_chunk — 将一个数组分割成多个
+将一个数组分割成多个数组，其中每个数组的单元数目由 size 决定。最后一个数组的单元数目可能会少于 size个。
+设为 TRUE，可以使 PHP 保留输入数组中原来的键名。如果你指定了 FALSE，那每个结果数组将用从零开始的新数字索引。默认值是 FALSE。
+$input = array(&quot;a&quot; =&gt; &quot;green&quot;, &quot;red&quot;, &quot;b&quot; =&gt; &quot;green&quot;, &quot;blue&quot;, &quot;red&quot;);
+$result = array_unique($input);
+print_r($result);
+Array
+(
+    [a] =&gt; green
+    [0] =&gt; red
+    [1] =&gt; blue
+)
+
+array_unique — 移除数组中重复的值
+$records = array(
+    array(
+        &apos;id&apos; =&gt; 2135,
+        &apos;first_name&apos; =&gt; &apos;John&apos;,
+        &apos;last_name&apos; =&gt; &apos;Doe&apos;,
+    ),
+    array(
+        &apos;id&apos; =&gt; 3245,
+        &apos;first_name&apos; =&gt; &apos;Sally&apos;,
+        &apos;last_name&apos; =&gt; &apos;Smith&apos;,
+    ),
+    array(
+        &apos;id&apos; =&gt; 5342,
+        &apos;first_name&apos; =&gt; &apos;Jane&apos;,
+        &apos;last_name&apos; =&gt; &apos;Jones&apos;,
+    ),
+    array(
+        &apos;id&apos; =&gt; 5623,
+        &apos;first_name&apos; =&gt; &apos;Peter&apos;,
+        &apos;last_name&apos; =&gt; &apos;Doe&apos;,
+    )
+);
+
+$first_names = array_column($records, &apos;first_name&apos;);
+print_r($first_names);
+Array
+(
+    [0] =&gt; John
+    [1] =&gt; Sally
+    [2] =&gt; Jane
+    [3] =&gt; Peter
+)
+array_column — 返回数组中指定的一列
+
+
+$array = array(0 =&gt; 100, &quot;color&quot; =&gt; &quot;red&quot;);
+print_r(array_keys($array));
+
+$array = array(&quot;blue&quot;, &quot;red&quot;, &quot;green&quot;, &quot;blue&quot;, &quot;blue&quot;);
+print_r(array_keys($array, &quot;blue&quot;));
+
+$array = array(&quot;color&quot; =&gt; array(&quot;blue&quot;, &quot;red&quot;, &quot;green&quot;),
+               &quot;size&quot;  =&gt; array(&quot;small&quot;, &quot;medium&quot;, &quot;large&quot;));
+print_r(array_keys($array));
+
+Array
+(
+    [0] =&gt; 0
+    [1] =&gt; color
+)
+Array
+(
+    [0] =&gt; 0
+    [1] =&gt; 3
+    [2] =&gt; 4
+)
+Array
+(
+    [0] =&gt; color
+    [1] =&gt; size
+)
+array_keys — 返回数组中部分的或所有的键名
+
+
+$input2 = &quot;hello,there&quot;;
+var_dump( explode( &apos;,&apos;, $input2 ) );
+array(2)
+(
+    [0] =&gt; string(5) &quot;hello&quot;
+    [1] =&gt; string(5) &quot;there&quot;
+)
+explode — 使用一个字符串分割另一个字符串,此函数返回由字符串组成的数组
+
+
+$array = array(&apos;lastname&apos;, &apos;email&apos;, &apos;phone&apos;);
+$comma_separated = implode(&quot;,&quot;, $array);
+echo $comma_separated;
+ // lastname,email,phone
+ implode - 使用字符串连接数组元素
+
+
+$array1 = array(&quot;a&quot; =&gt; &quot;green&quot;, &quot;red&quot;, &quot;blue&quot;);
+$array2 = array(&quot;b&quot; =&gt; &quot;green&quot;, &quot;yellow&quot;, &quot;red&quot;);
+$result = array_intersect($array1, $array2);
+print_r($result);
+Array
+(
+    [a] =&gt; green
+    [0] =&gt; red
+)
+array_intersect — 计算数组的交集,rray_intersect() 返回一个数组，该数组包含了所有在
+ array1 中也同时出现在所有其它参数数组中的值。注意键名保留不变。
+
+
+$stack = array(&quot;orange&quot;, &quot;banana&quot;);
+array_push($stack, &quot;apple&quot;, &quot;raspberry&quot;);
+print_r($stack);
+Array
+(
+    [0] =&gt; orange
+    [1] =&gt; banana
+    [2] =&gt; apple
+    [3] =&gt; raspberry
+)
+array_push — 将一个或多个单元压入数组的末尾（入栈）
+
+
+&lt;?php
+function cube($n)
+{
+    return($n * $n * $n);
+}
+
+$a = array(1, 2, 3, 4, 5);
+$b = array_map(&quot;cube&quot;, $a);
+print_r($b);
+?&gt;
+这使得 $b 成为：
+Array
+(
+    [0] =&gt; 1
+    [1] =&gt; 8
+    [2] =&gt; 27
+    [3] =&gt; 64
+    [4] =&gt; 125
+)
+ array_map — 为数组的每个元素应用回调函数
+
+
+&lt;?php
+$directory = new Directory(&apos;.&apos;);
+var_dump(method_exists($directory,&apos;read&apos;));
+?&gt;
+以上例程会输出：
+bool(true)
+method_exists — 检查类的方法是否存在
+
+
+shuffle()
+shuffle() 函数把数组中的元素按随机顺序重新排列。该函数为数组中的元素分配新的键名。已有键名将被删除
+
+$my_array = array(&quot;a&quot;=&gt;&quot;red&quot;,&quot;b&quot;=&gt;&quot;green&quot;,&quot;c&quot;=&gt;&quot;blue&quot;,&quot;d&quot;=&gt;&quot;yellow&quot;,&quot;e&quot;=&gt;&quot;purple&quot;);
+shuffle($my_array);
+print_r($my_array);
+
+
+array_multisort(array1,sorting order,sorting type,array2,array3...)
+array_multisort() 函数对多个数组或多维数组进行排序。
+参数中的数组被当成一个表的列并以行来进行排序 - 这类似 SQL 的 ORDER BY 子句的功能。第一个数组是要排序的主要数组。
+数组中的行（值）比较为相同的话，就会按照下一个输入数组中相应值的大小进行排序，依此类推。
+
+
+... 是 PHP 的展开表达式。
+&lt;?php
+function add($a, $b, $c) {
+    return $a + $b + $c;
+}
+
+$operators = [2, 3];
+echo add(1, ...$operators);    // 。 6
+?&gt;
+</code></pre>
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                    <p class="copyright-item">
+                        <span>版权声明:</span>
+                        <span>文章均原创，如有侵权，请联系删除，转载请注明出处。</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>签名:</span>
+                         <span>追求事物的真谛</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>标签:</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/php-basic/"># php basic</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">返回</a>
+                <span>· </span>
+                <a href="/">首页</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2020/09/15/mysql索引/">mysql索引</a>
+            
+            
+            <a class="next" rel="next" href="/2020/09/15/websocket/">websocket</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© 2019  glong
+        |
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? "https://" : "http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1277816600'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s5.cnzz.com/z_stat.php%3Fid%3D1277816600%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+        </span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>
