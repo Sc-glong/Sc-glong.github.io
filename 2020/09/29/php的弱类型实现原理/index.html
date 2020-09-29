@@ -7,7 +7,7 @@
 
 
 
-<title>mysql索引 | glong</title>
+<title>php的弱类型实现原理 | glong</title>
 
 
 
@@ -103,74 +103,11 @@
             <div class="container">
     
     
-        <div class="post-toc">
-    <div class="tocbot-list">
-    </div>
-    <div class="tocbot-list-menu">
-        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
-        <a onclick="go_top()">返回顶部</a>
-        <a onclick="go_bottom()">Go to bottom</a>
-    </div>
-</div>
-
-<script>
-    document.ready(
-        function () {
-            tocbot.init({
-                tocSelector: '.tocbot-list',
-                contentSelector: '.post-content',
-                headingSelector: 'h1, h2, h3, h4, h5',
-                collapseDepth: 1,
-                orderedList: false,
-                scrollSmooth: true,
-            })
-        }
-    )
-
-    function expand_toc() {
-        var b = document.querySelector(".tocbot-toc-expand");
-        tocbot.init({
-            tocSelector: '.tocbot-list',
-            contentSelector: '.post-content',
-            headingSelector: 'h1, h2, h3, h4, h5',
-            collapseDepth: 6,
-            orderedList: false,
-            scrollSmooth: true,
-        });
-        b.setAttribute("onclick", "collapse_toc()");
-        b.innerHTML = "Collapse all"
-    }
-
-    function collapse_toc() {
-        var b = document.querySelector(".tocbot-toc-expand");
-        tocbot.init({
-            tocSelector: '.tocbot-list',
-            contentSelector: '.post-content',
-            headingSelector: 'h1, h2, h3, h4, h5',
-            collapseDepth: 1,
-            orderedList: false,
-            scrollSmooth: true,
-        });
-        b.setAttribute("onclick", "expand_toc()");
-        b.innerHTML = "Expand all"
-    }
-
-    function go_top() {
-        window.scrollTo(0, 0);
-    }
-
-    function go_bottom() {
-        window.scrollTo(0, document.body.scrollHeight);
-    }
-
-</script>
-
-    
 
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">mysql索引</h1>
+            <h1 class="post-title">php的弱类型实现原理</h1>
             
                 <div class="post-meta">
                     
@@ -179,14 +116,14 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">September 15, 2020&nbsp;&nbsp;15:44:47</a>
+                        Date: <a href="#">September 29, 2020&nbsp;&nbsp;11:28:12</a>
                         </span>
                     
                     
                         <span class="post-category">
                     Category:
                             
-                                <a href="/categories/mysql/">mysql</a>
+                                <a href="/categories/php/">php</a>
                             
                         </span>
                     
@@ -195,12 +132,17 @@
         </header>
 
         <div class="post-content">
-            <p><a href="https://blog.csdn.net/login_sonata/article/details/75268075" target="_blank" rel="noopener">传送门</a></p>
-<p><a href="https://mp.weixin.qq.com/s?__biz=MzI4Njc5NjM1NQ==&mid=2247489831&idx=1&sn=748df3b637084f4a7dcbcc1b2835ca1e&chksm=ebd6260bdca1af1df320909a069aed1a1739d5922c3ffd8f42dc30570e33084b6f0af9e4dc35&scene=21#wechat_redirect" target="_blank" rel="noopener">mysql入门到入土</a></p>
-<h4 id="InnoDB密集索引规则："><a href="#InnoDB密集索引规则：" class="headerlink" title="InnoDB密集索引规则："></a>InnoDB密集索引规则：</h4><p>若一个主键被定义，该主键则作为密集索引。<br>若没有主键被定义，该表的第一个唯一非空索引则作为密集索引。<br>若不满足以上条件，InnoDB内部会生成一个隐藏主键（密集索引）。<br>非主键索引存储相关键位和其对应的主键值，包含两次查找。</p>
+            <p>众所周知，php是弱类型语言，没有类型声明，一个 $ 符号就是上帝。<br>那我们今天来探讨一下php弱类型的实现原理<br>首先我们来了解php变量的存储，每一个成功的语言的背后都有C语言，php的变量到c语言中就是一个结构体：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">struct _zval_struct &#123;</span><br><span class="line">    zvalue_value value; /* 储存变量的值 */</span><br><span class="line">    zend_uint refcount__gc; /* 引用计数，用于GC */</span><br><span class="line">    zend_uchar type; /* 储存变量类型 */</span><br><span class="line">    zend_uchar is_ref__gc; /* 是否为引用，即 &amp;$a */</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>value 就是存储变量实际的值。<br>type 存储的是变量类型<br>is_ref__gc 是否引用，就是这个用来区别&amp;$a和$a<br>refcount__gc 引用计数，用于GC</p>
+<p>而value的类型声明是zvalue_value，这个是c语言的union共同体</p>
 <blockquote>
-<p>注：InnoDB如果查询条件为主键索引，则只需查询一次，但是辅助索引需要查询两次，先通过辅助索引查询到主键索引，再查询到数据。</p>
+<p>定义下面的成员变量共享一块内存，每个成员在任意时刻有且只有一个成员使用此内存。</p>
 </blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">union data&#123;</span><br><span class="line">    int i;</span><br><span class="line">    double d;</span><br><span class="line">    char str[20];</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>那么此时你也就能知道php的弱类型是怎么实现的了。<br>但是由于共同体union的空间大小是由最大的变量来实现的，那么就可能造成浪费，而php7在实现的时候，改用指针的方式，而不直接存储对象本身，这使得性能得到很大的优化。</p>
 
         </div>
 
@@ -229,7 +171,7 @@
                 <span class="tag">
                     
                     
-                        <a href="/tags/mysql/"># mysql</a>
+                        <a href="/tags/php/"># php</a>
                     
                         
                 </span>
@@ -242,10 +184,8 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2020/09/29/php5与PHP7的差别/">php5与PHP7的差别</a>
             
-            
-            <a class="next" rel="next" href="/2020/09/15/functions/">functions</a>
+            <a class="next" rel="next" href="/2020/09/29/php5与PHP7的差别/">php5与PHP7的差别</a>
             
         </section>
 
