@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+
+
+<title>php日志产出与类型 | glong</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">glong&#39; blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">文档</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于我</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">glong&#39; blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">文档</a>
+                
+                    <a class="menu-item" href="/categories">分类</a>
+                
+                    <a class="menu-item" href="/tags">标签</a>
+                
+                    <a class="menu-item" href="/about">关于我</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">返回顶部</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">php日志产出与类型</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">glong</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">September 30, 2020&nbsp;&nbsp;09:44:29</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/php/">php</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>在业务开发中，常常需要查询requestlog,servicelog等日志来查看请求是否到达了，请求接口参数是否正常，返回参数是否正常等。不同与access.log,error.log等nginx日志。</p>
+<h3 id="日志类型"><a href="#日志类型" class="headerlink" title="日志类型"></a>日志类型</h3><p>我们先来介绍一下日志的类型：</p>
+<h5 id="nginx日志"><a href="#nginx日志" class="headerlink" title="nginx日志"></a>nginx日志</h5><p>error.log,access.log,nginx.log。这类日志主要由nginx产出。如下是示例：<br>error.log</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">2020/09/22 14:04:20 [error] 952#0: *2449789 upstream timed out (110: Connection timed out) while reading response header from upstream, client: 10.2.1.45, server: qa02-crm.xuebadev.com, request: &quot;POST /config/getConfig HTTP/1.0&quot;, upstream: &quot;fastcgi://127.0.0.1:9000&quot;, host: &quot;qa02-crm.xuebadev.com&quot;, referrer: &quot;http://qa02-crm.xuebadev.com/dist/XGManage/turnVisitTask&quot;</span><br><span class="line">2020/09/22 14:04:20 [error] 952#0: *2449804 upstream timed out (110: Connection timed out) while reading response header from upstream, client: 10.2.1.45, server: qa02-crm.xuebadev.com, request: &quot;POST /config/getBannerUrl HTTP/1.0&quot;, upstream: &quot;fastcgi://127.0.0.1:9000&quot;, host: &quot;qa02-crm.xuebadev.com&quot;, referrer: &quot;http://qa02-crm.xuebadev.com/dist/login?redirect=%252Fcustom%252Fpublic&quot;</span><br><span class="line">2020/09/22 14:04:20 [error] 952#0: *2449806 upstream timed out (110: Connection timed out) while reading response header from upstream, client: 10.2.1.45, server: qa02-crm.xuebadev.com, request: &quot;POST /config/getConfig HTTP/1.0&quot;, upstream: &quot;fastcgi://127.0.0.1:9000&quot;, host: &quot;qa02-crm.xuebadev.com&quot;, referrer: &quot;http://qa02-crm.xuebadev.com/dist/login?redirect=%252Fcustom%252Fpublic&quot;</span><br></pre></td></tr></table></figure>
+
+<p>access.log</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">10.2.1.45 - - [29/Sep/2020:15:50:47 +0800] &quot;POST /admin/accountInfo HTTP/1.0&quot; 200 34604 &#123;&#125; &quot;http://qa02-crm.xuebadev.com/dist/custom/waitCall&quot; &quot;response 0.185&quot; &quot;request 0.186&quot;&quot;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36&quot; &quot;114.93.213.109&quot; &quot;1601365847.288&quot; &quot;0&quot;</span><br><span class="line">10.2.1.45 - - [29/Sep/2020:15:52:28 +0800] &quot;POST /admin/accountInfo HTTP/1.0&quot; 200 34673 &#123;&#125; &quot;http://qa02-crm.xuebadev.com/dist/order/orderInfo&quot; &quot;response 0.198&quot; &quot;request 0.199&quot;&quot;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36&quot; &quot;117.107.136.164&quot; &quot;1601365948.357&quot; &quot;0&quot;</span><br><span class="line">10.2.1.45 - - [29/Sep/2020:15:53:41 +0800] &quot;POST /admin/accountInfo HTTP/1.0&quot; 200 27816 &#123;&#125; &quot;http://qa02-crm.xuebadev.com/dist/XGManage/xgView/123674&quot; &quot;response 0.187&quot; &quot;request 0.189&quot;&quot;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36&quot; &quot;117.107.136.166&quot; &quot;1601366021.275&quot; &quot;0&quot;</span><br></pre></td></tr></table></figure>
+
+<h5 id="业务日志"><a href="#业务日志" class="headerlink" title="业务日志"></a>业务日志</h5><p>request.log:请求该业务的日志  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[2020-09-29 16:15:17.226813] INFO message_center &#123;&quot;response_time&quot;:0.030293941497803,&quot;request_uri&quot;:&quot;\/msg\/getImportantUnreadMsg&quot;,&quot;request_header&quot;:&#123;&quot;trace&quot;:[&quot;0&quot;],&quot;logid&quot;:[&quot;6bcada58-0769-3b50-836e-f042b47f57d8728&quot;],&quot;content-type&quot;:[&quot;application\/x-www-form-urlencoded&quot;],&quot;user-agent&quot;:[&quot;GuzzleHttp\/6.5.5 curl\/7.19.7 PHP\/7.0.4&quot;],&quot;content-length&quot;:[&quot;6&quot;],&quot;connection&quot;:[&quot;close&quot;],&quot;x-forwarded-for&quot;:[&quot;106.75.74.197&quot;],&quot;x-real-ip&quot;:[&quot;106.75.74.197&quot;],&quot;host&quot;:[&quot;qa02-message.xuebadev.com&quot;]&#125;,&quot;request_body&quot;:&#123;&quot;aid&quot;:&quot;17&quot;&#125;,&quot;response_body&quot;:&#123;&quot;statusCode&quot;:0,&quot;msg&quot;:&quot;success&quot;,&quot;success&quot;:true&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>service.log:请求其他业务的日志</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[2020-09-29 16:15:17.839152] INFO message_center &#123;&quot;response_time&quot;:0.087344884872437,&quot;request_uri&quot;:&quot;http:\/\/qa03-account.qaservice.xuebadev.com\/admin\/getAdminInfoByIds&quot;,&quot;request_header&quot;:&#123;&quot;logid&quot;:&quot;24bfb819-6fab-3f88-a3ae-1d8040508923148&quot;,&quot;trace&quot;:1&#125;,&quot;request_body&quot;:&#123;&quot;aids&quot;:[0]&#125;,&quot;response_body&quot;:&#123;&quot;statusCode&quot;:0,&quot;msg&quot;:&quot;success&quot;,&quot;success&quot;:true&#125;&#125;  </span><br><span class="line">[2020-09-29 16:15:17.927866] INFO message_center &#123;&quot;response_time&quot;:0.087810039520264,&quot;request_uri&quot;:&quot;http:\/\/qa03-account.qaservice.xuebadev.com\/admin\/getAdminInfoByIds&quot;,&quot;request_header&quot;:&#123;&quot;logid&quot;:&quot;24bfb819-6fab-3f88-a3ae-1d8040508923148&quot;,&quot;trace&quot;:1&#125;,&quot;request_body&quot;:&#123;&quot;aids&quot;:[0]&#125;,&quot;response_body&quot;:&#123;&quot;statusCode&quot;:0,&quot;msg&quot;:&quot;success&quot;,&quot;success&quot;:true&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="日志产出"><a href="#日志产出" class="headerlink" title="日志产出"></a>日志产出</h3><p><a href="https://blog.csdn.net/kikajack/article/details/81318552" target="_blank" rel="noopener">传送门</a><br>我们先从php的异常和错误开始。</p>
+<h5 id="Exception"><a href="#Exception" class="headerlink" title="Exception"></a>Exception</h5><p>是所有异常的基类。继承自Throwable</p>
+<h5 id="Error"><a href="#Error" class="headerlink" title="Error"></a>Error</h5><p>是所有错误的基类。继承自Throwable  </p>
+<p>我们应该合理的使用异常，在应对不用的业务场景时，确定是否使用异常处理机制，以及在什么地方处理异常机制快速定位问题。</p>
+<h3 id="requestlog和servicelog的由来"><a href="#requestlog和servicelog的由来" class="headerlink" title="requestlog和servicelog的由来"></a>requestlog和servicelog的由来</h3><p>背景：<br>基于nginx，laravel</p>
+<h5 id="requestlog怎么来的"><a href="#requestlog怎么来的" class="headerlink" title="requestlog怎么来的"></a>requestlog怎么来的</h5><p>由于php的框架都是单一入口，可以为框架注册全局路由中间件，如IOlog路由中间，在路由中间件类中增加terminate方法，该方法应该同时接收请求和响应，这时我们就可以把请求参数，和返回值写到requestlog中。</p>
+<h5 id="servicelog怎么来的"><a href="#servicelog怎么来的" class="headerlink" title="servicelog怎么来的"></a>servicelog怎么来的</h5><p>在laravel中我们常用guzzlehttp包发送http请求，在发送的时候可以把参数等写入日志。</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                    <p class="copyright-item">
+                        <span>版权声明:</span>
+                        <span>文章均原创，如有侵权，请联系删除，转载请注明出处。</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>签名:</span>
+                         <span>追求事物的真谛</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>标签:</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/php/"># php</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">返回</a>
+                <span>· </span>
+                <a href="/">首页</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2020/09/30/php执行过程/">php执行过程</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© 2019  glong
+        |
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? "https://" : "http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1277816600'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s5.cnzz.com/z_stat.php%3Fid%3D1277816600%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+        </span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>

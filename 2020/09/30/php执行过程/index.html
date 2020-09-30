@@ -7,7 +7,7 @@
 
 
 
-<title>Archives: 2020/9 | glong</title>
+<title>php执行过程 | glong</title>
 
 
 
@@ -100,103 +100,96 @@
     }
 </script>
         <div class="main">
-            <div class="post-wrap archive">
+            <div class="container">
     
     
-        
 
-        
-            <h3>2020</h3>
-        
-
-        <article class="archive-item">
-            <a class="archive-item-link" href="/2020/09/30/php日志产出与类型/">php日志产出与类型</a>
-            <span class="archive-item-date">September 30, 2020</span>
-        </article>
     
-        
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">php执行过程</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">glong</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">September 30, 2020&nbsp;&nbsp;09:43:39</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/php/">php</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>1.Scanning(Lexing)  ,将PHP代码转换为语言片段(Tokens)<br>2.Parsing, 将Tokens转换成简单而有意义的表达式<br>3.Compilation, 将表达式编译成Opocdes  </p>
+<blockquote>
+<p>compilation阶段，会把tokens编译成一个个op_array,每一个op_array的最后一条op_code就是ZEND_HANDLE_EXCEPTION，如果在这个op_array执行过程中有异常被throw的时候，就会执行这个op_array最后一条op_code。</p>
+</blockquote>
+<p>4.Execution, 顺次执行Opcodes，每次一条，从而实现PHP脚本的功能。</p>
+<p><a href="https://www.laruence.com/2008/06/18/221.html" target="_blank" rel="noopener">大佬的opcodes解析</a></p>
+
+        </div>
 
         
+            <section class="post-copyright">
+                
+                
+                
+                    <p class="copyright-item">
+                        <span>版权声明:</span>
+                        <span>文章均原创，如有侵权，请联系删除，转载请注明出处。</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>签名:</span>
+                         <span>追求事物的真谛</span>
+                     </p>
+                
 
-        <article class="archive-item">
-            <a class="archive-item-link" href="/2020/09/30/php执行过程/">php执行过程</a>
-            <span class="archive-item-date">September 30, 2020</span>
-        </article>
-    
+            </section>
         
+        <section class="post-tags">
+            <div>
+                <span>标签:</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/php/"># php</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">返回</a>
+                <span>· </span>
+                <a href="/">首页</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2020/09/30/php日志产出与类型/">php日志产出与类型</a>
+            
+            
+            <a class="next" rel="next" href="/2020/09/29/php的弱类型实现原理/">php的弱类型实现原理</a>
+            
+        </section>
 
-        
 
-        <article class="archive-item">
-            <a class="archive-item-link" href="/2020/09/29/php的弱类型实现原理/">php的弱类型实现原理</a>
-            <span class="archive-item-date">September 29, 2020</span>
-        </article>
-    
-        
-
-        
-
-        <article class="archive-item">
-            <a class="archive-item-link" href="/2020/09/29/php5与PHP7的差别/">php5与PHP7的差别</a>
-            <span class="archive-item-date">September 29, 2020</span>
-        </article>
-    
-        
-
-        
-
-        <article class="archive-item">
-            <a class="archive-item-link" href="/2020/09/15/mysql索引/">mysql索引</a>
-            <span class="archive-item-date">September 15, 2020</span>
-        </article>
-    
-        
-
-        
-
-        <article class="archive-item">
-            <a class="archive-item-link" href="/2020/09/15/functions/">functions</a>
-            <span class="archive-item-date">September 15, 2020</span>
-        </article>
-    
-        
-
-        
-
-        <article class="archive-item">
-            <a class="archive-item-link" href="/2020/09/15/websocket/">websocket</a>
-            <span class="archive-item-date">September 15, 2020</span>
-        </article>
-    
-        
-
-        
-
-        <article class="archive-item">
-            <a class="archive-item-link" href="/2020/09/15/ADSL-NAT/">ADSL,NAT</a>
-            <span class="archive-item-date">September 15, 2020</span>
-        </article>
-    
-        
-
-        
-
-        <article class="archive-item">
-            <a class="archive-item-link" href="/2020/09/15/负载均衡/">负载均衡</a>
-            <span class="archive-item-date">September 15, 2020</span>
-        </article>
-    
-        
-
-        
-
-        <article class="archive-item">
-            <a class="archive-item-link" href="/2020/09/15/unix网络相关/">unix网络相关</a>
-            <span class="archive-item-date">September 15, 2020</span>
-        </article>
-    
-    
+    </article>
 </div>
+
         </div>
         <footer id="footer" class="footer">
     <div class="copyright">
